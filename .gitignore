@@ -13,6 +13,7 @@ cmake_install.cmake
 *.lo
 *.o
 *.obj
+Cube2
 
 # Precompiled Headers
 *.gch
