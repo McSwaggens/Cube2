@@ -1,3 +1,12 @@
+// Copyright 2017 Daniel Jones. All Rights Reserved.
+
+/* OpenGL.h
+	Description:
+		Contains ALL OpenGL and OpenGL extension headers
+*/
+
+
+
 #pragma once
 
 #include <GL/glew.h>

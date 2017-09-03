@@ -1,3 +1,11 @@
+// Copyright 2017 Daniel Jones. All Rights Reserved.
+
+/* Shader.h
+	Description:
+		Shader class holds the OpenGL shader information.
+*/
+
+
 #pragma once
 
 #include "OpenGL.h"

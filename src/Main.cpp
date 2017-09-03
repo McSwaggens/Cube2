@@ -1,3 +1,10 @@
+// Copyright 2017 Daniel Jones. All Rights Reserved.
+
+/* Main.cpp
+	Description:
+		Initializes the game engine
+*/
+
 
 // STANDARD
 #include <stdio.h>
