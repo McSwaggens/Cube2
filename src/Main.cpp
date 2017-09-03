@@ -7,12 +7,14 @@
 #include <math.h>
 
 // OPENGL
-#include "opengl.h"
+#include "OpenGL.h"
 
-// DXEngine
-#include "shader.h"
-#include "shader_forge.h"
-#include "bmp.h"
+// Engine
+#include "Shader.h"
+#include "ShaderCompiler.h"
+#include "Bmp.h"
+
+
 
 // CODE
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "opengl.h"
+#include "OpenGL.h"
 
 // class?
 struct Texture
