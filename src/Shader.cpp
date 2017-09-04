@@ -4,7 +4,7 @@ Shader::Shader (GLuint _program_id)
 {
 	this->program_id = _program_id;
 	
-	glGetUniformLocation (program_id, "MVP");
+	matrix_id = glGetUniformLocation (program_id, "MVP");
 }
 
 void Shader::Dispose ()
