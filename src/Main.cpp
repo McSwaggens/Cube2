@@ -159,14 +159,21 @@ int main ()
 	uint ticks = 0;
 	
 	glEnable (GL_DEPTH_TEST);
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthFunc (GL_LESS);
 	
 	
-	Texture* texture_a = BMP::Load ((path + "/src/textures/bricks.bmp").c_str());
-	Texture* texture_b = BMP::Load ((path + "/src/textures/brickss.bmp").c_str());
 	
-	glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
-	glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
+	Texture* texture_a = new Texture ((path + "/src/textures/tux.png").c_str());
+	Texture* texture_b = new Texture ((path + "/src/textures/bricks.bmp").c_str());
+	
+	printf ("texture_a: %i\n", texture_a->texture_id);
+	printf ("texture_b: %i\n", texture_b->texture_id);
+	
+	
+	//glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
+	//glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
 	
 	
 	while (looping)
@@ -242,6 +249,16 @@ int main ()
 		mat4 mvp = projection * view * model;
 		
 		tex_shader->Enable (mvp);
+		
+		glActiveTexture (GL_TEXTURE0);
+		glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
+		
+		glActiveTexture (GL_TEXTURE1);
+		glBindTexture (GL_TEXTURE_2D, texture_b->texture_id);
+		GLint tex2loc = glGetUniformLocation (tex_shader->program_id, "tex2");
+		glUniform1i (tex2loc, 1);
+		
+		//0x84C0
 		
 		glEnableVertexAttribArray (0);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
