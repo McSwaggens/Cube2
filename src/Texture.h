@@ -10,8 +10,11 @@
 
 #include "OpenGL.h"
 
-// class?
-struct Texture
+class Texture
 {
+public:
 	GLuint texture_id;
+	
+	Texture ();
+	Texture (const char* image_location);
 };
