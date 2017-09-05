@@ -16,12 +16,12 @@ void main ()
 
 
 #frag
-out vec3 color;
+out vec4 color;
 in vec2 UV;
 
 uniform sampler2D tex;
 
 void main ()
 {
-	color = texture(tex, UV).rgb;
+	color = texture(tex, UV);
 }
