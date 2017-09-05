@@ -21,4 +21,5 @@ public:
 	Vector (float x, float y);
 	
 	glm::vec2 ToGLM ();
+	glm::vec3 ToGLM3 ();
 };

@@ -23,3 +23,8 @@ glm::vec2 Vector::ToGLM ()
 {
 	return *(glm::vec2*)(void*)this;
 }
+
+glm::vec3 Vector::ToGLM3 ()
+{
+	return glm::vec3(x, y, 0.0f);
+}
