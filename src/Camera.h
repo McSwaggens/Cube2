@@ -18,6 +18,8 @@ public:
 	float rotation;
 	
 	Camera ();
+	void AddZoom (float _zoom);
 	Vector GetActual ();
+	Vector _GetActual ();
 	glm::mat4 GetMVPMatrix ();
 };
