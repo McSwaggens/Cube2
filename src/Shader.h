@@ -19,7 +19,9 @@ public:
 	
 	void Enable (mat4 mvp); // Enable the shader
 	void Disable (); // Disable the shader
-private:
+	
+	
 	GLuint program_id;
+private:
 	GLuint matrix_id;
 };
