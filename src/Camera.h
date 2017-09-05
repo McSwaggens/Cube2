@@ -14,6 +14,7 @@ class Camera
 {
 public:
 	Vector position;
+	float zoom;
 	float rotation;
 	
 	Camera ();

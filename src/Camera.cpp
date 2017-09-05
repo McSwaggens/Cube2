@@ -3,6 +3,7 @@
 
 Camera::Camera ()
 {
+	zoom = 10.0f;
 }
 
 Vector Camera::GetActual ()
@@ -19,8 +20,8 @@ Vector Camera::GetActual ()
 	
 	
 	// Center the camera
-	copy.x += 10;
-	copy.y -= 10;
+	copy.x += this->zoom;
+	copy.y -= this->zoom;
 	
 	return copy;
 }
