@@ -100,6 +100,7 @@ int main ()
 	
 	std::string path = GetWorkingDirectory ();
 	Shader* shader = ShaderForge::CreateShader (path + "/src/shaders/test.glsl");
+	Shader* tex_shader = ShaderForge::CreateShader (path + "/src/shaders/Textured.glsl");
 	
 	//glfwSetInputMode (window, GLFW_STICKY_KEYS, GL_TRUE);
 	
@@ -122,6 +123,30 @@ int main ()
 		-1.0f, -1.0f, 0.0f,
 	};
 	
+	static const GLfloat g_uv_buffer_data[] =
+	{
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
+		
+		1.0f, 1.0f,
+		0.0f, 1.0f,
+		-0.0f, 0.0f,
+	};
+	
+	GLuint UVArrayID;
+	glGenVertexArrays(1, &UVArrayID);
+	glBindVertexArray(UVArrayID);
+	
+	
+	GLuint uv_buffer;
+	glGenBuffers (1, &uv_buffer);
+	glBindBuffer (GL_ARRAY_BUFFER, uv_buffer);
+	glBufferData (GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
+	
+	
+	
+	
 	GLuint VertexArrayID;
 	glGenVertexArrays(1, &VertexArrayID);
 	glBindVertexArray(VertexArrayID);
@@ -137,10 +162,11 @@ int main ()
 	glDepthFunc (GL_LESS);
 	
 	
-	BMP::Load ((path + "/src/textures/bricks.bmp").c_str());
+	Texture* texture_a = BMP::Load ((path + "/src/textures/bricks.bmp").c_str());
+	Texture* texture_b = BMP::Load ((path + "/src/textures/brickss.bmp").c_str());
 	
-	
-	
+	glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
+	glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
 	
 	
 	while (looping)
@@ -199,7 +225,7 @@ int main ()
 		
 		camera->AddZoom(-Mouse::scroll.y);
 		
-		//pos = Mouse::GetWorldPosition(camera);
+		pos = Mouse::GetWorldPosition(camera);
 		
 		
 		// MVP
@@ -215,7 +241,8 @@ int main ()
 		model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 		mat4 mvp = projection * view * model;
 		
-		shader->Enable (mvp);
+		tex_shader->Enable (mvp);
+		
 		glEnableVertexAttribArray (0);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
 		glVertexAttribPointer
@@ -228,11 +255,24 @@ int main ()
 			(void*)0
 		);
 		
+		glEnableVertexAttribArray (1);
+		glBindBuffer (GL_ARRAY_BUFFER, uv_buffer);
+		glVertexAttribPointer
+		(
+			1,
+			2,
+			GL_FLOAT,
+			GL_FALSE,
+			0,
+			(void*)0
+		);
+		
+		
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
 		glDisableVertexAttribArray (0);
-		shader->Disable ();
+		tex_shader->Disable ();
 		
 		
 		
