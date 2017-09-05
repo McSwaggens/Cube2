@@ -22,6 +22,9 @@
 #include "Bmp.h"
 #include "Vector.h"
 #include "Camera.h"
+#include "Time.h"
+#include "Mouse.h"
+#include "Window.h"
 
 
 
@@ -34,59 +37,23 @@ std::string GetWorkingDirectory ()
 	return std::string(path);
 }
 
-float width;
-float height;
-
-void framebuffer_size_callback (GLFWwindow* window, int _width, int _height)
-{
-	glViewport (0, 0, _width, _height);
-	width = _width;
-	height = _height;
-}
-
 Camera* camera = new Camera ();
 Vector pos;
 
-float movespeed = 1;
+void framebuffer_size_callback (GLFWwindow* _window, int _width, int _height)
+{
+	glViewport (0, 0, _width, _height);
+	Window::resolution.x = _width;
+	Window::resolution.y = _height;
+}
+
+float movespeed = 4;
+#define PI 3.14159265358979323846
 
 
 void keyCallback (GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_W && action == GLFW_PRESS)
-	{
-		camera->position.y += movespeed;
-	}
-	if (key == GLFW_KEY_S && action == GLFW_PRESS)
-	{
-		camera->position.y -= movespeed;
-	}
-	if (key == GLFW_KEY_D && action == GLFW_PRESS)
-	{
-		camera->position.x += movespeed;
-	}
-	if (key == GLFW_KEY_A && action == GLFW_PRESS)
-	{
-		camera->position.x -= movespeed;
-	}
 	
-	
-	
-	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
-	{
-		pos.y += movespeed;
-	}
-	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-	{
-		pos.y -= movespeed;
-	}
-	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS)
-	{
-		pos.x += movespeed;
-	}
-	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
-	{
-		pos.x -= movespeed;
-	}
 }
 
 
@@ -138,15 +105,21 @@ int main ()
 	
 	bool looping = true;
 	
+	Window::window = window;
 	
 	glfwSetFramebufferSizeCallback (window, framebuffer_size_callback);
 	glfwSetKeyCallback (window, keyCallback);
+	Mouse::Initialize(window);
 	
 	static const GLfloat g_vertex_buffer_data[] =
 	{
 		-1.0f, -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,
+		1.0f,  1.0f, 0.0f,
+		
+		1.0f,  1.0f, 0.0f,
+		-1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f,
 	};
 	
 	GLuint VertexArrayID;
@@ -175,23 +148,72 @@ int main ()
 		ticks++;
 		glfwPollEvents ();
 		
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		printf ("[Camera] X:%f, Y:%f\n", camera->position.x, camera->position.y);
-		printf ("[Position] X:%f, Y:%f\n", pos.x, pos.y);
+		// printf ("[Camera] X:%f, Y:%f\n", camera->position.x, camera->position.y);
+		// printf ("[Position] X:%f, Y:%f\n", pos.x, pos.y);
+		
+		
+		Time::Update ();
+		Mouse::Update ();
+		
+		
+		
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			pos.y += movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			pos.y -= movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		{
+			pos.x += movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		{
+			pos.x -= movespeed * Time::delta;
+		}
+		
+		
+		
+		
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			camera->position.y += movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			camera->position.y -= movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			camera->position.x += movespeed * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			camera->position.x -= movespeed * Time::delta;
+		}
+		
+		camera->AddZoom(Mouse::scroll.y);
+		
+		pos = Mouse::GetWorldPosition(camera);
+		
 		
 		// MVP
 		
 		
-		mat4 projection = ortho(0.0f, 20.0f, -20.0f, 0.0f, -1.0f, 1.0f);
+		mat4 projection = ortho(0.0f, camera->zoom, -camera->zoom, 0.0f, -1.0f, 1.0f);
 		mat4 view;
 		mat4 model;
 		model = translate(model, vec3(pos.x, pos.y, 0));
 		Vector normalized_camera_position = camera->GetActual ();
 		model = translate(model, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
+		model = rotate(model, (float)(PI*2.0f), vec3(0.0f, 0.0f, 1.0f));
+		model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 		mat4 mvp = projection * view * model;
-		
 		
 		shader->Enable (mvp);
 		glEnableVertexAttribArray (0);
@@ -205,7 +227,10 @@ int main ()
 			0,
 			(void*)0
 		);
-		glDrawArrays (GL_TRIANGLES, 0, 3);
+		
+		
+		glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+		glDrawArrays (GL_TRIANGLES, 0, 6);
 		glDisableVertexAttribArray (0);
 		shader->Disable ();
 		
