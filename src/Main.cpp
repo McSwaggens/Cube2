@@ -197,9 +197,9 @@ int main ()
 			camera->position.x -= movespeed * Time::delta;
 		}
 		
-		camera->AddZoom(Mouse::scroll.y);
+		camera->AddZoom(-Mouse::scroll.y);
 		
-		pos = Mouse::GetWorldPosition(camera);
+		//pos = Mouse::GetWorldPosition(camera);
 		
 		
 		// MVP
@@ -229,7 +229,7 @@ int main ()
 		);
 		
 		
-		glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
 		glDisableVertexAttribArray (0);
 		shader->Disable ();
