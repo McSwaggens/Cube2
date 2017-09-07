@@ -25,6 +25,7 @@
 #include "Time.h"
 #include "Mouse.h"
 #include "Window.h"
+#include "Material.h"
 
 
 
@@ -101,6 +102,7 @@ int main ()
 	std::string path = GetWorkingDirectory ();
 	Shader* shader = ShaderForge::CreateShader (path + "/src/shaders/test.glsl");
 	Shader* tex_shader = ShaderForge::CreateShader (path + "/src/shaders/Textured.glsl");
+	Shader* blend_shader = ShaderForge::CreateShader (path + "/src/shaders/Blend.glsl");
 	
 	//glfwSetInputMode (window, GLFW_STICKY_KEYS, GL_TRUE);
 	
@@ -165,12 +167,16 @@ int main ()
 	
 	
 	
-	Texture* texture_a = new Texture ((path + "/src/textures/tux.png").c_str());
-	Texture* texture_b = new Texture ((path + "/src/textures/bricks.bmp").c_str());
+	Texture* texture_a = new Texture ((path + "/src/textures/tux.png").c_str()); // 1
+	Texture* texture_b = new Texture ((path + "/src/textures/bricks.bmp").c_str()); // 2
 	
-	printf ("texture_a: %i\n", texture_a->texture_id);
-	printf ("texture_b: %i\n", texture_b->texture_id);
+	MATERIAL(Blend)
+		M_TEXTURE(tex)
+		M_TEXTURE(tex2)
+	M_END_INIT(blend_material, blend_shader); 
 	
+	blend_material.tex.data = texture_a;
+	blend_material.tex2.data = texture_b;
 	
 	//glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
 	//glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
@@ -190,6 +196,8 @@ int main ()
 		
 		Time::Update ();
 		Mouse::Update ();
+		
+		
 		
 		
 		
@@ -232,7 +240,7 @@ int main ()
 		
 		camera->AddZoom(-Mouse::scroll.y);
 		
-		pos = Mouse::GetWorldPosition(camera);
+		//pos = Mouse::GetWorldPosition(camera);
 		
 		
 		// MVP
@@ -248,15 +256,20 @@ int main ()
 		model = scale(model, vec3(1.0f, 1.0f, 1.0f));
 		mat4 mvp = projection * view * model;
 		
-		tex_shader->Enable (mvp);
 		
-		glActiveTexture (GL_TEXTURE0);
-		glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
 		
-		glActiveTexture (GL_TEXTURE1);
-		glBindTexture (GL_TEXTURE_2D, texture_b->texture_id);
-		GLint tex2loc = glGetUniformLocation (tex_shader->program_id, "tex2");
-		glUniform1i (tex2loc, 1);
+		
+		// blend_shader->Enable (mvp);
+		
+		// glActiveTexture (GL_TEXTURE0);
+		// glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
+		// GLint tex1loc = glGetUniformLocation (blend_shader->program_id, "tex");
+		// glUniform1i (tex1loc, 0);
+		
+		// glActiveTexture (GL_TEXTURE1);
+		// glBindTexture (GL_TEXTURE_2D, texture_b->texture_id);
+		// GLint tex2loc = glGetUniformLocation (blend_shader->program_id, "tex2");
+		// glUniform1i (tex2loc, 1);
 		
 		//0x84C0
 		
@@ -284,13 +297,13 @@ int main ()
 			(void*)0
 		);
 		
-		
+		blend_material.Enable (mvp);
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
 		glDisableVertexAttribArray (0);
-		tex_shader->Disable ();
 		
+		blend_material.Disable ();
 		
 		
 		glfwSwapBuffers (window);
