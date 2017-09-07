@@ -174,12 +174,6 @@ int main ()
 	MATERIAL(Blend)
 		M_TEXTURE(tex)
 		M_TEXTURE(tex2)
-		
-		void Enable (glm::mat4 mvp)
-		{
-			Material::Enable (mvp);
-		}
-		
 	M_END_INIT(blend_material, blend_shader); 
 	
 	blend_material.tex.data = texture_a;
