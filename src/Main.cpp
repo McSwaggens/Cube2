@@ -274,27 +274,24 @@ int main ()
 			(void*)0
 		);
 		
-		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
+		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		
+		
+		
+		
+		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
 		blend_material.Enable (mvp_a);
 		
-		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+		
+		
+		
 		glDrawArrays (GL_TRIANGLES, 0, 6);
-		
-		
 		blend_material.Disable ();
 		
 		
-		
-		
 		mat4 mvp_b = camera->GenerateMVPMatrix (transform_b);
-		
 		blend_material.Enable (mvp_b);
-		
-		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
-		
-		
 		blend_material.Disable ();
 		
 		glDisableVertexAttribArray (0);

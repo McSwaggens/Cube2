@@ -1,4 +1,5 @@
 #include "Material.h"
+#include "Time.h"
 
 Material::Material (Shader* shader)
 {
@@ -25,6 +26,14 @@ void Material::Init ()
 		Cell<float>* float_cell = float_cells[i];
 		float_cell->id = glGetUniformLocation (shader->program_id, float_cell->variable_name.c_str());
 	}
+	
+	
+	//?
+	//? ─── GET THE TIME UNIFORM ───────────────────────────────────────────────────────
+	//?
+	
+	
+	time_id = glGetUniformLocation (shader->program_id, "time");
 }
 
 void Material::Enable (glm::mat4 mvp)
@@ -38,6 +47,12 @@ void Material::Enable (glm::mat4 mvp)
 		glActiveTexture (GL_TEXTURE0+i);
 		glBindTexture (GL_TEXTURE_2D, tex_cell->data->texture_id);
 		glUniform1i (tex_cell->id, i);
+	}
+	
+	//* Check if the shader actually has a time variable
+	if (time_id != -1)
+	{
+		glUniform1f(time_id, Time::time);
 	}
 }
 

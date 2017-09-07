@@ -51,6 +51,7 @@ protected:
 	std::vector<Cell<Texture*>*> texture_cells;
 	std::vector<Cell<Vector>*> vector_cells;
 	std::vector<Cell<float>*> float_cells;
+	GLint time_id;
 };
 
 //?
