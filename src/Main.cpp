@@ -313,6 +313,7 @@ int main ()
 	shader->Dispose ();
 	
 	glDeleteBuffers (1, &vertex_buffer);
+	glDeleteBuffers (1, &uv_buffer);
 	
 	glfwTerminate ();
 	
