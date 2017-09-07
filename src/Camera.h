@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Vector.h"
+#include "Transform.h"
 
 class Camera
 {
@@ -21,5 +22,5 @@ public:
 	void AddZoom (float _zoom);
 	Vector GetActual ();
 	Vector _GetActual ();
-	glm::mat4 GetMVPMatrix ();
+	glm::mat4 GenerateMVPMatrix (Transform transform);
 };

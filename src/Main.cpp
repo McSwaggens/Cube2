@@ -39,7 +39,8 @@ std::string GetWorkingDirectory ()
 }
 
 Camera* camera = new Camera ();
-Vector pos;
+Transform transform_a;
+Transform transform_b;
 
 void framebuffer_size_callback (GLFWwindow* _window, int _width, int _height)
 {
@@ -48,7 +49,7 @@ void framebuffer_size_callback (GLFWwindow* _window, int _width, int _height)
 	Window::resolution.y = _height;
 }
 
-float movespeed = 4;
+float movespeed = 10;
 #define PI 3.14159265358979323846
 
 
@@ -182,6 +183,10 @@ int main ()
 	//glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
 	
 	
+	transform_b.position = Vector (5, 5);
+	transform_a.scale = Vector (1, 1);
+	transform_b.scale = Vector (1, 1);
+	
 	while (looping)
 	{
 		ticks++;
@@ -203,19 +208,19 @@ int main ()
 		
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		{
-			pos.y += movespeed * Time::delta;
+			transform_a.position.y += movespeed * Time::delta;
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
-			pos.y -= movespeed * Time::delta;
+			transform_a.position.y -= movespeed * Time::delta;
 		}
 		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 		{
-			pos.x += movespeed * Time::delta;
+			transform_a.position.x += movespeed * Time::delta;
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
 		{
-			pos.x -= movespeed * Time::delta;
+			transform_a.position.x -= movespeed * Time::delta;
 		}
 		
 		
@@ -243,35 +248,7 @@ int main ()
 		//pos = Mouse::GetWorldPosition(camera);
 		
 		
-		// MVP
 		
-		
-		mat4 projection = ortho(0.0f, camera->zoom, -camera->zoom, 0.0f, -1.0f, 1.0f);
-		mat4 view;
-		mat4 model;
-		model = translate(model, vec3(pos.x, pos.y, 0));
-		Vector normalized_camera_position = camera->GetActual ();
-		model = translate(model, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
-		model = rotate(model, (float)(PI*2.0f), vec3(0.0f, 0.0f, 1.0f));
-		model = scale(model, vec3(1.0f, 1.0f, 1.0f));
-		mat4 mvp = projection * view * model;
-		
-		
-		
-		
-		// blend_shader->Enable (mvp);
-		
-		// glActiveTexture (GL_TEXTURE0);
-		// glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
-		// GLint tex1loc = glGetUniformLocation (blend_shader->program_id, "tex");
-		// glUniform1i (tex1loc, 0);
-		
-		// glActiveTexture (GL_TEXTURE1);
-		// glBindTexture (GL_TEXTURE_2D, texture_b->texture_id);
-		// GLint tex2loc = glGetUniformLocation (blend_shader->program_id, "tex2");
-		// glUniform1i (tex2loc, 1);
-		
-		//0x84C0
 		
 		glEnableVertexAttribArray (0);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
@@ -297,13 +274,31 @@ int main ()
 			(void*)0
 		);
 		
-		blend_material.Enable (mvp);
+		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
+		
+		blend_material.Enable (mvp_a);
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
-		glDisableVertexAttribArray (0);
+		
 		
 		blend_material.Disable ();
+		
+		
+		
+		
+		mat4 mvp_b = camera->GenerateMVPMatrix (transform_b);
+		
+		blend_material.Enable (mvp_b);
+		
+		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
+		glDrawArrays (GL_TRIANGLES, 0, 6);
+		
+		
+		blend_material.Disable ();
+		
+		glDisableVertexAttribArray (0);
+		glDisableVertexAttribArray (1);
 		
 		
 		glfwSwapBuffers (window);
