@@ -1,4 +1,4 @@
-//? Copyright 2017 Daniel Jones. All Rights Reserved.
+// Copyright 2017 Daniel Jones. All Rights Reserved.
 
 /* Material.h
 	Description:
@@ -15,7 +15,6 @@
 #include "OpenGL.h"
 #include "Vector.h"
 
-class Material;
 template<typename T> 
 class Cell;
 
@@ -37,8 +36,8 @@ class Cell;
 class Material
 {
 public:
-	void Enable (glm::mat4 mvp);
-	void Disable ();
+	virtual void Enable (glm::mat4 mvp);
+	virtual void Disable ();
 	
 	Material (Shader* shader);
 	
@@ -46,7 +45,7 @@ public:
 	void InitVariable (Cell<Vector>* vector_cell);
 	void InitVariable (Cell<Texture*>* texture_cell);
 	void InitVariable (Cell<float>* f_cell);
-private:
+protected:
 	
 	Shader* shader;
 	std::vector<Cell<Texture*>*> texture_cells;
