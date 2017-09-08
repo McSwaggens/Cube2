@@ -26,6 +26,7 @@
 #include "Mouse.h"
 #include "Window.h"
 #include "Material.h"
+#include "Math.h"
 
 
 
@@ -50,7 +51,6 @@ void framebuffer_size_callback (GLFWwindow* _window, int _width, int _height)
 }
 
 float movespeed = 10;
-#define PI 3.14159265358979323846
 
 
 void keyCallback (GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -275,8 +275,6 @@ int main ()
 		);
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-		
-		
 		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);

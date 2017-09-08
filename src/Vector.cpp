@@ -37,6 +37,15 @@ Vector::Vector (float x, float y)
 
 
 //?
+//? ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
+//?
+
+float Vector::GetMagnitude ()
+{
+	return sqrt(x * x + y * y);
+}
+
+//?
 //? ─── CONVERTING TO GLM DATA TYPES ───────────────────────────────────────────────
 //?
 

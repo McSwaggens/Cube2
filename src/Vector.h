@@ -9,11 +9,13 @@
 
 #include <glm/glm.hpp>
 
+class Vector;
+
+#include "Math.h"
+
 //?
 //? ─── GLOBAL VECTORS ─────────────────────────────────────────────────────────────
 //?
-
-class Vector;
 
 extern Vector zero;
 extern Vector one;
@@ -48,10 +50,12 @@ public:
 	//? ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
 	//?
 	
-	inline float GetMagnitude ()
-	{
-		return sqrt(x * x + y * y);
-	}
+	// inline Vector MoveLocal (float r)
+	// {
+	// 	return Vector (this->x + Sin(2*PI*r/360));
+	// }
+	
+	float GetMagnitude ();
 	
 	//?
 	//? ─── OPERATORS ──────────────────────────────────────────────────────────────────

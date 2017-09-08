@@ -10,6 +10,8 @@
 #include "Vector.h"
 #include <cmath>
 
+#define PI 3.14159265358979323846
+
 //?
 //? ─── CLAMP ──────────────────────────────────────────────────────────────────────
 //?
@@ -25,15 +27,9 @@ Vector Clamp (Vector v, float min, float max);
 //?
 
 
-inline float Sin (float v)
-{
-	return (sin(v));
-}
+float Sin (float v);
 
-inline Vector Sin (Vector v)
-{
-	return Vector (sin(v.x), sin(v.y));
-}
+Vector Sin (Vector v);
 
 
 //?
@@ -41,25 +37,15 @@ inline Vector Sin (Vector v)
 //?
 
 
-inline float Cos (float v)
-{
-	return (cos(v));
-}
+float Cos (float v);
 
-inline Vector Cos (Vector v)
-{
-	return Vector (cos(v.x), cos(v.y));
-}
-
+Vector Cos (Vector v);
 
 //?
 //? ─── DOT ────────────────────────────────────────────────────────────────────────
 //?
 
 
-inline float Dot (Vector a, Vector b)
-{
-	a.x * b.x + a.y * b.y;
-}
+float Dot (Vector a, Vector b);
 
 //? ────────────────────────────────────────────────────────────────────────────────
