@@ -69,27 +69,29 @@ float Dot (Vector a, Vector b)
 //? ─── ROTATION ───────────────────────────────────────────────────────────────────
 //?
 
+#define DEGREES 57.2957795131f; // 180 / PI
+#define RADIANS 0.01745329251f; // PI / 180
 
 float Angle (Vector a, Vector b)
 {
-	return acos (Clamp(Dot(a.Normalized(), b.Normalized()), -1.0f, 1.0f)) * 57.29578f;
+	return acos (Clamp(Dot(a.Normalized(), b.Normalized()), -1.0f, 1.0f)) * DEGREES;
 }
 
 float RotationBetween (Vector a, Vector b)
 {
 	Vector dif = b - a;
-	float s = (b.y < a.y) ? -1.0f : 1.0f;
+	float s = (a.y > b.y) ? -1.0f : 1.0f;
 	return (Angle (vright, dif) * s) + -90;
 }
 
 float Degrees (float radians)
 {
-	return radians * (180 / PI);
+	return radians * DEGREES;
 }
 
 float Radians (float degrees)
 {
-	return degrees * (PI / 180);
+	return degrees * RADIANS;
 }
 
 
