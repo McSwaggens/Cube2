@@ -281,8 +281,10 @@ int main ()
 		
 		printf ("Angle: %f\n", Radians(RotationBetween(transform_b.position, mouse_pos)));
 		
-		transform_b.rotation = RotationBetween(transform_b.position, mouse_pos);
-		transform_b.LocalMove (2 * Time::delta);
+		// transform_b.LocalMove (2 * Time::delta);
+		
+		transform_a.position = mouse_pos.Normalized () * 3.0f;
+		transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
 		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
