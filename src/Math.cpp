@@ -61,7 +61,35 @@ Vector Cos (Vector v)
 
 float Dot (Vector a, Vector b)
 {
-	return a.x * b.x + a.y * b.y;
+	return (a.x * b.x) + (a.y * b.y);
+}
+
+
+//?
+//? ─── ROTATION ───────────────────────────────────────────────────────────────────
+//?
+
+
+float Angle (Vector a, Vector b)
+{
+	return acos (Clamp(Dot(a.Normalized(), b.Normalized()), -1.0f, 1.0f)) * 57.29578f;
+}
+
+float RotationBetween (Vector a, Vector b)
+{
+	Vector dif = b - a;
+	float s = (b.y < a.y) ? -1.0f : 1.0f;
+	return (Angle (vright, dif) * s) + -90;
+}
+
+float Degrees (float radians)
+{
+	return radians * (180 / PI);
+}
+
+float Radians (float degrees)
+{
+	return degrees * (PI / 180);
 }
 
 

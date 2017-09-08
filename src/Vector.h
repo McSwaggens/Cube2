@@ -17,12 +17,12 @@ class Vector;
 //? ─── GLOBAL VECTORS ─────────────────────────────────────────────────────────────
 //?
 
-extern Vector zero;
-extern Vector one;
-extern Vector up;
-extern Vector down;
-extern Vector left;
-extern Vector right;
+extern const Vector vzero;
+extern const Vector vone;
+extern const Vector vup;
+extern const Vector vdown;
+extern const Vector vleft;
+extern const Vector vright;
 
 class Vector
 {
@@ -54,6 +54,7 @@ public:
 	
 	float GetMagnitude ();
 	float Distance (Vector v);
+	Vector Normalized ();
 	
 	//?
 	//? ─── OPERATORS ──────────────────────────────────────────────────────────────────

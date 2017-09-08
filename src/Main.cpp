@@ -20,13 +20,13 @@
 #include "Shader.h"
 #include "ShaderCompiler.h"
 #include "Bmp.h"
-#include "Vector.h"
 #include "Camera.h"
 #include "Time.h"
 #include "Mouse.h"
 #include "Window.h"
 #include "Material.h"
 #include "Math.h"
+#include "Vector.h"
 
 
 
@@ -278,12 +278,11 @@ int main ()
 		
 		Vector mouse_pos = Mouse::GetWorldPosition(camera);
 		
-		printf ("Distance: %f\n", transform_a.position.Distance(mouse_pos));
 		
+		printf ("Angle: %f\n", Radians(RotationBetween(transform_b.position, mouse_pos)));
 		
-		//transform_a.position.MoveLocal (2 * Time::delta, Time::time * 360);
-		
-		transform_b.rotation = Time::time;
+		transform_b.rotation = RotationBetween(transform_b.position, mouse_pos);
+		transform_b.position.MoveLocal (2 * Time::delta, transform_b.rotation);
 		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);

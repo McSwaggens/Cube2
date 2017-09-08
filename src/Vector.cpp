@@ -5,12 +5,12 @@
 //? ─── GLOBAL VECTORS ─────────────────────────────────────────────────────────────
 //?
 
-Vector zero (0, 0);
-Vector one (1, 1);
-Vector up (0, 1);
-Vector down (0, -1);
-Vector left (-1, 0);
-Vector right (1, 0);
+const Vector vzero (0, 0);
+const Vector vone (1, 1);
+const Vector vup (0, 1);
+const Vector vdown (0, -1);
+const Vector vleft (-1, 0);
+const Vector vright (1, 0);
 
 //?
 //? ─── CONSTRUCTORS ───────────────────────────────────────────────────────────────
@@ -42,7 +42,7 @@ Vector::Vector (float x, float y)
 
 float Vector::GetMagnitude ()
 {
-	return sqrt(x * x + y * y);
+	return sqrt((x * x) + (y * y));
 }
 
 float Vector::Distance (Vector v)
@@ -52,7 +52,19 @@ float Vector::Distance (Vector v)
 
 Vector Vector::MoveLocal (float distance, float r)
 {
-	return (*this) = (*this) + (Vector (Sin((2*PI*r)/360), Cos((2*PI*r)/360)) * distance);
+	return (*this) = (*this) + (Vector (-Sin((2*PI*r)/360), Cos((2*PI*r)/360)) * distance);
+}
+
+Vector Vector::Normalized ()
+{
+	float mag = GetMagnitude ();
+	
+	if (mag > 0)
+	{
+		return (*this) / mag;
+	}
+	
+	return vzero;
 }
 
 //?

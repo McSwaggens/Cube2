@@ -61,7 +61,7 @@ glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 	model = translate(model, vec3(transform.position.x, transform.position.y, 0));
 	Vector normalized_camera_position = this->GetActual ();
 	model = translate(model, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
-	model = rotate(model, transform.rotation, vec3(0.0f, 0.0f, 1.0f));
+	model = rotate(model, Radians(transform.rotation), vec3(0.0f, 0.0f, 1.0f));
 	model = scale(model, vec3(transform.scale.x, transform.scale.y, 1.0f));
 	mat4 mvp = projection * view * model;
 	

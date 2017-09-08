@@ -48,4 +48,17 @@ Vector Cos (Vector v);
 
 float Dot (Vector a, Vector b);
 
+
+//?
+//? ─── ROTATION ───────────────────────────────────────────────────────────────────
+//?
+
+
+float Angle (Vector a, Vector b);
+float RotationBetween (Vector a, Vector b);
+
+float Degrees (float radians);
+float Radians (float degrees);
+
+
 //? ────────────────────────────────────────────────────────────────────────────────
