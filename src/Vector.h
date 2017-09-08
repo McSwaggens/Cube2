@@ -56,6 +56,7 @@ public:
 	// }
 	
 	float GetMagnitude ();
+	float Distance (Vector v);
 	
 	//?
 	//? ─── OPERATORS ──────────────────────────────────────────────────────────────────

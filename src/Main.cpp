@@ -276,6 +276,8 @@ int main ()
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		
+		printf ("Distance: %f\n", transform_a.position.Distance(Mouse::GetWorldPosition(camera)));
+		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
 		blend_material.Enable (mvp_a);

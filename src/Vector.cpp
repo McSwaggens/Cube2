@@ -45,6 +45,11 @@ float Vector::GetMagnitude ()
 	return sqrt(x * x + y * y);
 }
 
+float Vector::Distance (Vector v)
+{
+	return ((*this) - v).GetMagnitude();
+}
+
 //?
 //? ─── CONVERTING TO GLM DATA TYPES ───────────────────────────────────────────────
 //?
