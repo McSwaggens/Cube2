@@ -50,7 +50,8 @@ public:
 	//? ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
 	//?
 	
-	Vector MoveLocal (float distance, float r);
+	Vector Move (float distance, float deg);
+	Vector Move (Vector v);
 	
 	float GetMagnitude ();
 	float Distance (Vector v);

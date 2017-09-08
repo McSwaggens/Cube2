@@ -50,9 +50,14 @@ float Vector::Distance (Vector v)
 	return ((*this) - v).GetMagnitude();
 }
 
-Vector Vector::MoveLocal (float distance, float r)
+Vector Vector::Move (float distance, float deg)
 {
-	return (*this) = (*this) + (Vector (-Sin((2*PI*r)/360), Cos((2*PI*r)/360)) * distance);
+	return (*this) = (*this) + (Vector (-Sin((2*PI*deg)/360), Cos((2*PI*deg)/360)) * distance);
+}
+
+Vector Vector::Move (Vector v)
+{
+	return (*this) += v;
 }
 
 Vector Vector::Normalized ()

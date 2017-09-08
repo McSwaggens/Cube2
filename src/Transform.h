@@ -33,6 +33,16 @@ public:
 	
 	Transform ();
 	Transform (Vector position, float rotation, Vector scale);
+	
+	
+	//?
+	//? ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
+	//?
+	
+	
+	Vector LocalMove (float distance);
+	
+	
 private:
 	
 };

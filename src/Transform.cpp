@@ -25,6 +25,10 @@ Transform::Transform (Vector position = Vector(0, 0), float rotation = 0.0f, Vec
 //?
 
 
+Vector Transform::LocalMove (float distance)
+{
+	return this->position.Move(distance, rotation);
+}
 
 
 //? ────────────────────────────────────────────────────────────────────────────────
