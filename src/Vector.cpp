@@ -50,6 +50,11 @@ float Vector::Distance (Vector v)
 	return ((*this) - v).GetMagnitude();
 }
 
+Vector Vector::MoveLocal (float distance, float r)
+{
+	return (*this) = (*this) + (Vector (Sin((2*PI*r)/360), Cos((2*PI*r)/360)) * distance);
+}
+
 //?
 //? ─── CONVERTING TO GLM DATA TYPES ───────────────────────────────────────────────
 //?

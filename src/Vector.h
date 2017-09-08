@@ -50,10 +50,7 @@ public:
 	//? ─── FUNCTIONS ──────────────────────────────────────────────────────────────────
 	//?
 	
-	// inline Vector MoveLocal (float r)
-	// {
-	// 	return Vector (this->x + Sin(2*PI*r/360));
-	// }
+	Vector MoveLocal (float distance, float r);
 	
 	float GetMagnitude ();
 	float Distance (Vector v);

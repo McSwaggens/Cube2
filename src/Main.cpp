@@ -276,7 +276,14 @@ int main ()
 		
 		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
 		
-		printf ("Distance: %f\n", transform_a.position.Distance(Mouse::GetWorldPosition(camera)));
+		Vector mouse_pos = Mouse::GetWorldPosition(camera);
+		
+		printf ("Distance: %f\n", transform_a.position.Distance(mouse_pos));
+		
+		
+		//transform_a.position.MoveLocal (2 * Time::delta, Time::time * 360);
+		
+		transform_b.rotation = Time::time;
 		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
