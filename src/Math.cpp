@@ -64,6 +64,11 @@ float Dot (Vector a, Vector b)
 	return (a.x * b.x) + (a.y * b.y);
 }
 
+float PerpDot (Vector a, Vector b)
+{
+	return (a.x * b.y) - (a.y * b.x);
+}
+
 
 //?
 //? ─── ROTATION ───────────────────────────────────────────────────────────────────

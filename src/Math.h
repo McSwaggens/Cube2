@@ -47,6 +47,7 @@ Vector Cos (Vector v);
 
 
 float Dot (Vector a, Vector b);
+float PerpDot (Vector a, Vector b);
 
 
 //?
