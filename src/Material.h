@@ -14,6 +14,7 @@
 #include "Texture.h"
 #include "OpenGL.h"
 #include "Vector.h"
+#include "Color.h"
 
 template<typename T> 
 class Cell;
@@ -26,6 +27,7 @@ class Cell;
 #define M_VECTOR(n)				Cell<Vector> n = Cell<Vector>(#n, (Material*)this);
 #define M_TEXTURE(n)			Cell<Texture*> n = Cell<Texture*>(#n, (Material*)this);
 #define M_FLOAT(n)				Cell<float> n = Cell<float>(#n, (Material*)this);
+#define M_COLOR(n)				Cell<Color> n = Cell<Color>(#n, (Material*)this);
 #define M_END()				}
 #define M_END_INIT(n, s)	} n (s); n.Init ();
 
@@ -45,12 +47,14 @@ public:
 	void InitVariable (Cell<Vector>* vector_cell);
 	void InitVariable (Cell<Texture*>* texture_cell);
 	void InitVariable (Cell<float>* f_cell);
+	void InitVariable (Cell<Color>* f_cell);
 protected:
 	
 	Shader* shader;
 	std::vector<Cell<Texture*>*> texture_cells;
 	std::vector<Cell<Vector>*> vector_cells;
 	std::vector<Cell<float>*> float_cells;
+	std::vector<Cell<Color>*> color_cells;
 	GLint time_id;
 };
 

@@ -27,6 +27,18 @@ void Material::Init ()
 		float_cell->id = glGetUniformLocation (shader->program_id, float_cell->variable_name.c_str());
 	}
 	
+	for (int i = 0; i < this->float_cells.size(); i++)
+	{
+		Cell<float>* float_cell = float_cells[i];
+		float_cell->id = glGetUniformLocation (shader->program_id, float_cell->variable_name.c_str());
+	}
+	
+	for (int i = 0; i < this->color_cells.size(); i++)
+	{
+		Cell<Color>* color_cell = color_cells[i];
+		color_cell->id = glGetUniformLocation (shader->program_id, color_cell->variable_name.c_str());
+	}
+	
 	
 	//?
 	//? ─── GET THE TIME UNIFORM ───────────────────────────────────────────────────────
@@ -48,6 +60,15 @@ void Material::Enable (glm::mat4 mvp)
 		glBindTexture (GL_TEXTURE_2D, tex_cell->data->texture_id);
 		glUniform1i (tex_cell->id, i);
 	}
+	
+	for (int i = 0; i < this->color_cells.size(); i++)
+	{
+		Cell<Color>* color_cell = color_cells[i];
+		
+		glUniform4fv (color_cell->id, 1, (GLfloat*)&color_cell->data);
+	}
+	
+	
 	
 	//* Check if the shader actually has a time variable
 	if (time_id != -1)
@@ -78,4 +99,9 @@ void Material::InitVariable (Cell<Texture*>* texture_cell)
 void Material::InitVariable (Cell<float>* f_cell)
 {
 	this->float_cells.push_back (f_cell);
+}
+
+void Material::InitVariable (Cell<Color>* c_cell)
+{
+	this->color_cells.push_back (c_cell);
 }
