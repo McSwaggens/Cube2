@@ -22,5 +22,7 @@ public:
 	void AddZoom (float _zoom);
 	Vector GetActual ();
 	Vector _GetActual ();
+	Vector GetReal (Vector v);
 	glm::mat4 GenerateMVPMatrix (Transform transform);
+	glm::mat4 GenerateMVPMatrix (Vector v);
 };

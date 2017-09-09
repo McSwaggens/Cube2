@@ -52,6 +52,14 @@ Vector Camera::GetActual ()
 	return copy;
 }
 
+Vector Camera::GetReal (Vector v)
+{
+	vec4 mv = this->GenerateMVPMatrix (v) * vec4(v.x, v.y, 0, 1);
+	return Vector (mv.x, mv.y);
+}
+
+//TODO: Put model matrix generationa and projection matrix into independant methods
+
 glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 {
 	
@@ -65,6 +73,19 @@ glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 	model = scale(model, vec3(transform.scale.x, transform.scale.y, 1.0f));
 	mat4 mvp = projection * view * model;
 	
+	return mvp;
+}
+
+glm::mat4 Camera::GenerateMVPMatrix (Vector v)
+{
+	
+	mat4 projection = ortho(0.0f, this->zoom, -this->zoom, 0.0f, -1.0f, 1.0f);
+	mat4 view;
+	mat4 model;
+	model = translate(model, vec3(v.x, v.y, 0));
+	Vector normalized_camera_position = this->GetActual ();
+	model = translate(model, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
+	mat4 mvp = projection * view * model;
 	
 	return mvp;
 }
