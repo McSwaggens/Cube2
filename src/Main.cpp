@@ -60,6 +60,86 @@ void keyCallback (GLFWwindow* window, int key, int scancode, int action, int mod
 
 
 
+void DrawLine (Vector _a, Vector _b, Camera* c, Material* m)
+{
+	Vector a = camera->GetReal (_a);
+	Vector b = camera->GetReal (_b);
+	
+	printf ("a -> x: %f, y: %f\n", a.x, a.y);
+	printf ("b -> x: %f, y: %f\n", b.x, b.y);
+	
+	const GLfloat g_line_buffer_data[] =
+	{
+		a.x, a.y, 0.0f,
+		b.x, b.y, 0.0f
+	};
+	
+	static const GLfloat g_1d_uv_buffer_data[] =
+	{
+		0.0f, 1.0f
+	};
+	
+	GLuint LineUVArrayID;
+	glGenVertexArrays(1, &LineUVArrayID);
+	glBindVertexArray(LineUVArrayID);
+	
+	GLuint line_uv_buffer;
+	glGenBuffers (1, &line_uv_buffer);
+	glBindBuffer (GL_ARRAY_BUFFER, line_uv_buffer);
+	glBufferData (GL_ARRAY_BUFFER, sizeof(g_1d_uv_buffer_data), g_1d_uv_buffer_data, GL_STATIC_DRAW);
+	
+	
+	GLuint LineVertexArrayID;
+	glGenVertexArrays(1, &LineVertexArrayID);
+	glBindVertexArray(LineVertexArrayID);
+	
+	GLuint line_vertex_buffer;
+	glGenBuffers (1, &line_vertex_buffer);
+	glBindBuffer (GL_ARRAY_BUFFER, line_vertex_buffer);
+	glBufferData (GL_ARRAY_BUFFER, sizeof(g_line_buffer_data), g_line_buffer_data, GL_STATIC_DRAW);
+	
+	m->Enable(mat4(1));
+	
+	
+	glEnableVertexAttribArray (0);
+	glBindBuffer (GL_ARRAY_BUFFER, line_vertex_buffer);
+	glVertexAttribPointer
+	(
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*)0
+	);
+	
+	glEnableVertexAttribArray (1);
+	glBindBuffer (GL_ARRAY_BUFFER, line_uv_buffer);
+	glVertexAttribPointer
+	(
+		1,
+		2,
+		GL_FLOAT,
+		GL_FALSE,
+		0,
+		(void*)0
+	);
+	
+	
+	glDrawArrays (GL_LINES, 0, 2);
+	
+	
+	m->Disable();
+	
+	glDisableVertexAttribArray (0);
+	glDisableVertexAttribArray (1);
+	
+	glDeleteBuffers (1, &line_vertex_buffer);
+	glDeleteBuffers (1, &line_uv_buffer);
+	
+}
+
+
 int main ()
 {
 	if (!glfwInit())
@@ -104,6 +184,7 @@ int main ()
 	Shader* shader = ShaderForge::CreateShader (path + "/src/shaders/test.glsl");
 	Shader* tex_shader = ShaderForge::CreateShader (path + "/src/shaders/Textured.glsl");
 	Shader* blend_shader = ShaderForge::CreateShader (path + "/src/shaders/Blend.glsl");
+	Shader* color_shader = ShaderForge::CreateShader (path + "/src/shaders/Color.glsl");
 	
 	//glfwSetInputMode (window, GLFW_STICKY_KEYS, GL_TRUE);
 	
@@ -114,6 +195,12 @@ int main ()
 	glfwSetFramebufferSizeCallback (window, framebuffer_size_callback);
 	glfwSetKeyCallback (window, keyCallback);
 	Mouse::Initialize(window);
+	
+	
+	
+	
+	
+	
 	
 	static const GLfloat g_vertex_buffer_data[] =
 	{
@@ -137,6 +224,8 @@ int main ()
 		-0.0f, 0.0f,
 	};
 	
+	
+	
 	GLuint UVArrayID;
 	glGenVertexArrays(1, &UVArrayID);
 	glBindVertexArray(UVArrayID);
@@ -146,8 +235,6 @@ int main ()
 	glGenBuffers (1, &uv_buffer);
 	glBindBuffer (GL_ARRAY_BUFFER, uv_buffer);
 	glBufferData (GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
-	
-	
 	
 	
 	GLuint VertexArrayID;
@@ -161,10 +248,10 @@ int main ()
 	
 	uint ticks = 0;
 	
-	glEnable (GL_DEPTH_TEST);
+	//glEnable (GL_DEPTH_TEST);
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDepthFunc (GL_LESS);
+	//glDepthFunc (GL_LESS);
 	
 	
 	
@@ -176,11 +263,20 @@ int main ()
 		M_TEXTURE(tex2)
 	M_END_INIT(blend_material, blend_shader); 
 	
+	MATERIAL(Color)
+		M_COLOR(in_color)
+	M_END_INIT(color_material, color_shader); 
+	
+	color_material.in_color.data = Color (1, 0, 1);
+	
 	blend_material.tex.data = texture_a;
 	blend_material.tex2.data = texture_b;
 	
 	//glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
 	//glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
+	
+	
+	
 	
 	
 	transform_b.position = Vector (5, 5);
@@ -250,6 +346,28 @@ int main ()
 		
 		
 		
+		Vector mouse_pos = Mouse::GetWorldPosition(camera);
+		
+		
+		//printf ("Angle: %f\n", Radians(RotationBetween(transform_b.position, mouse_pos)));
+		
+		// transform_b.LocalMove (2 * Time::delta);
+		
+		transform_a.position = mouse_pos.Normalized () * 3.0f;
+		transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
+		
+		// World position to screen position
+		
+		Vector camera_actual = camera->_GetActual ();
+		Vector sp = Vector ((camera->zoom*0.5f)-camera_actual.x, (camera->zoom*0.5f)-camera_actual.y);
+		
+		
+		
+		
+		
+		glDisableVertexAttribArray (0);
+		glDisableVertexAttribArray (1);
+		
 		glEnableVertexAttribArray (0);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
 		glVertexAttribPointer
@@ -274,24 +392,9 @@ int main ()
 			(void*)0
 		);
 		
-		//glPolygonMode (GL_FRONT_AND_BACK, GL_LINE);
-		
-		Vector mouse_pos = Mouse::GetWorldPosition(camera);
-		
-		
-		printf ("Angle: %f\n", Radians(RotationBetween(transform_b.position, mouse_pos)));
-		
-		// transform_b.LocalMove (2 * Time::delta);
-		
-		transform_a.position = mouse_pos.Normalized () * 3.0f;
-		transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
-		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
 		blend_material.Enable (mvp_a);
-		
-		
-		
 		
 		glDrawArrays (GL_TRIANGLES, 0, 6);
 		blend_material.Disable ();
@@ -304,6 +407,8 @@ int main ()
 		
 		glDisableVertexAttribArray (0);
 		glDisableVertexAttribArray (1);
+		
+		DrawLine (vzero, vone, camera, &color_material);
 		
 		
 		glfwSwapBuffers (window);
