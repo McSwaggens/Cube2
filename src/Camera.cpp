@@ -54,7 +54,7 @@ Vector Camera::GetActual ()
 
 Vector Camera::GetReal (Vector v)
 {
-	vec4 mv = this->GenerateMVPMatrix (v) * vec4(v.x, v.y, 0, 1);
+	vec4 mv = this->GenerateMVPMatrix (v) * vec4(0, 0, 0, 1);
 	return Vector (mv.x, mv.y);
 }
 
@@ -78,7 +78,6 @@ glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 
 glm::mat4 Camera::GenerateMVPMatrix (Vector v)
 {
-	
 	mat4 projection = ortho(0.0f, this->zoom, -this->zoom, 0.0f, -1.0f, 1.0f);
 	mat4 view;
 	mat4 model;
