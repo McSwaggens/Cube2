@@ -2,7 +2,7 @@
 
 /* Camera.h
 	Description:
-		Camera class
+		Camera Class
 */
 
 
@@ -10,6 +10,10 @@
 
 #include "Vector.h"
 #include "Transform.h"
+
+class Camera;
+
+extern const Camera* main_camera;
 
 class Camera
 {
@@ -23,6 +27,7 @@ public:
 	Vector GetActual ();
 	Vector _GetActual ();
 	Vector GetReal (Vector v);
+	float GetYAspect ();
 	glm::mat4 GenerateMVPMatrix (Transform transform);
 	glm::mat4 GenerateMVPMatrix (Vector v);
 };

@@ -51,7 +51,7 @@ Vector Mouse::GetWorldPosition (Camera* camera)
 	Vector camera_actual = camera->_GetActual ();
 	
 	world_position.x = (((Mouse::screen_position.x / Window::resolution.x)-0.5f) * camera->zoom)-camera_actual.x;
-	world_position.y = (((Mouse::screen_position.y / Window::resolution.y)-0.5f) * -camera->zoom)-camera_actual.y;
+	world_position.y = (((Mouse::screen_position.y / Window::resolution.y)-0.5f) * -camera->GetYAspect())-camera_actual.y;
 	return world_position;
 }
 
