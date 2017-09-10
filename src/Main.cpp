@@ -28,6 +28,7 @@
 #include "Math.h"
 #include "Vector.h"
 #include "RayTracing.h"
+#include "Graphics.h"
 
 
 // CODE
@@ -55,87 +56,6 @@ float movespeed = 10;
 
 void keyCallback (GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	
-}
-
-
-
-void DrawLine (Vector _a, Vector _b, Camera* c, Material* m)
-{
-	Vector a = camera->GetReal (_a);
-	Vector b = camera->GetReal (_b);
-	
-	printf ("a -> x: %f, y: %f\n", a.x, a.y);
-	printf ("b -> x: %f, y: %f\n", b.x, b.y);
-	
-	const GLfloat g_line_buffer_data[] =
-	{
-		a.x, a.y, 0.0f,
-		b.x, b.y, 0.0f
-	};
-	
-	static const GLfloat g_1d_uv_buffer_data[] =
-	{
-		0.0f, 1.0f
-	};
-	
-	GLuint LineUVArrayID;
-	glGenVertexArrays(1, &LineUVArrayID);
-	glBindVertexArray(LineUVArrayID);
-	
-	GLuint line_uv_buffer;
-	glGenBuffers (1, &line_uv_buffer);
-	glBindBuffer (GL_ARRAY_BUFFER, line_uv_buffer);
-	glBufferData (GL_ARRAY_BUFFER, sizeof(g_1d_uv_buffer_data), g_1d_uv_buffer_data, GL_STATIC_DRAW);
-	
-	
-	GLuint LineVertexArrayID;
-	glGenVertexArrays(1, &LineVertexArrayID);
-	glBindVertexArray(LineVertexArrayID);
-	
-	GLuint line_vertex_buffer;
-	glGenBuffers (1, &line_vertex_buffer);
-	glBindBuffer (GL_ARRAY_BUFFER, line_vertex_buffer);
-	glBufferData (GL_ARRAY_BUFFER, sizeof(g_line_buffer_data), g_line_buffer_data, GL_STATIC_DRAW);
-	
-	m->Enable(mat4(1));
-	
-	
-	glEnableVertexAttribArray (0);
-	glBindBuffer (GL_ARRAY_BUFFER, line_vertex_buffer);
-	glVertexAttribPointer
-	(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*)0
-	);
-	
-	glEnableVertexAttribArray (1);
-	glBindBuffer (GL_ARRAY_BUFFER, line_uv_buffer);
-	glVertexAttribPointer
-	(
-		1,
-		2,
-		GL_FLOAT,
-		GL_FALSE,
-		0,
-		(void*)0
-	);
-	
-	
-	glDrawArrays (GL_LINES, 0, 2);
-	
-	
-	m->Disable();
-	
-	glDisableVertexAttribArray (0);
-	glDisableVertexAttribArray (1);
-	
-	glDeleteBuffers (1, &line_vertex_buffer);
-	glDeleteBuffers (1, &line_uv_buffer);
 	
 }
 
@@ -201,7 +121,6 @@ int main ()
 	
 	
 	
-	
 	static const GLfloat g_vertex_buffer_data[] =
 	{
 		-1.0f, -1.0f, 0.0f,
@@ -226,9 +145,9 @@ int main ()
 	
 	
 	
-	GLuint UVArrayID;
-	glGenVertexArrays(1, &UVArrayID);
-	glBindVertexArray(UVArrayID);
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 	
 	
 	GLuint uv_buffer;
@@ -237,14 +156,13 @@ int main ()
 	glBufferData (GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 	
 	
-	GLuint VertexArrayID;
-	glGenVertexArrays(1, &VertexArrayID);
-	glBindVertexArray(VertexArrayID);
 	
 	GLuint vertex_buffer;
 	glGenBuffers (1, &vertex_buffer);
 	glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
 	glBufferData (GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+	
+	Graphics::InitGraphics ();
 	
 	uint ticks = 0;
 	
@@ -279,9 +197,8 @@ int main ()
 	
 	
 	
-	transform_b.position = Vector (5, 5);
-	transform_a.scale = Vector (1, 1);
-	transform_b.scale = Vector (1, 1);
+	transform_a.position = vleft;
+	transform_b.position = vright;
 	
 	while (looping)
 	{
@@ -339,7 +256,7 @@ int main ()
 			camera->position.x -= movespeed * Time::delta;
 		}
 		
-		camera->AddZoom(-Mouse::scroll.y);
+		camera->AddZoom(-Mouse::scroll.y * 2);
 		
 		//pos = Mouse::GetWorldPosition(camera);
 		
@@ -356,9 +273,6 @@ int main ()
 		// transform_a.position = mouse_pos.Normalized () * 3.0f;
 		// transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
 		
-		
-		glDisableVertexAttribArray (0);
-		glDisableVertexAttribArray (1);
 		
 		glEnableVertexAttribArray (0);
 		glBindBuffer (GL_ARRAY_BUFFER, vertex_buffer);
@@ -402,9 +316,12 @@ int main ()
 		
 		Vector result = mouse_pos;
 		
-		RayTracing::CheckIntersection (vzero, mouse_pos, Vector (1, 1), Vector(1, 0), result);
+		RayTracing::CheckIntersection (vzero, mouse_pos, Vector (2, 2), Vector(2, 0), result);
 		
-		DrawLine (vzero, result, camera, &color_material);
+		//Graphics::DrawLine (camera, vzero, vone, &color_material);
+		
+		Graphics::DrawLineRaw (vleft / 4, vright / 4, &color_material);
+		Graphics::DrawLineRaw (vup / 4, (vdown / 4), &color_material);
 		
 		
 		glfwSwapBuffers (window);
