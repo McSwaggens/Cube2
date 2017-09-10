@@ -27,7 +27,7 @@
 #include "Material.h"
 #include "Math.h"
 #include "Vector.h"
-
+#include "RayTracing.h"
 
 
 // CODE
@@ -353,8 +353,8 @@ int main ()
 		
 		// transform_b.LocalMove (2 * Time::delta);
 		
-		transform_a.position = mouse_pos.Normalized () * 3.0f;
-		transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
+		//transform_a.position = mouse_pos.Normalized () * 3.0f;
+		//transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
 		
 		// World position to screen position
 		
@@ -408,7 +408,11 @@ int main ()
 		glDisableVertexAttribArray (0);
 		glDisableVertexAttribArray (1);
 		
-		DrawLine (vzero, vone, camera, &color_material);
+		Vector result = mouse_pos;
+		
+		RayTracing::CheckIntersection (vzero, mouse_pos, Vector (1, 1), Vector(1, 0), result);
+		
+		DrawLine (vzero, result, camera, &color_material);
 		
 		
 		glfwSwapBuffers (window);
