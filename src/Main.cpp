@@ -353,16 +353,8 @@ int main ()
 		
 		// transform_b.LocalMove (2 * Time::delta);
 		
-		//transform_a.position = mouse_pos.Normalized () * 3.0f;
-		//transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
-		
-		// World position to screen position
-		
-		Vector camera_actual = camera->_GetActual ();
-		Vector sp = Vector ((camera->zoom*0.5f)-camera_actual.x, (camera->zoom*0.5f)-camera_actual.y);
-		
-		
-		
+		// transform_a.position = mouse_pos.Normalized () * 3.0f;
+		// transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
 		
 		
 		glDisableVertexAttribArray (0);
