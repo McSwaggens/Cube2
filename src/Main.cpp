@@ -29,6 +29,7 @@
 #include "Vector.h"
 #include "RayTracing.h"
 #include "Graphics.h"
+#include "DefaultMaterials.h"
 
 
 // CODE
@@ -320,8 +321,8 @@ int main ()
 		
 		//Graphics::DrawLine (camera, vzero, vone, &color_material);
 		
-		Graphics::DrawLineRaw (vleft / 4, vright / 4, &color_material);
-		Graphics::DrawLineRaw (vup / 4, (vdown / 4), &color_material);
+		Graphics::DrawLine (camera, mouse_pos + vleft, mouse_pos + vright, &color_material);
+		Graphics::DrawLine (camera, mouse_pos + vup, mouse_pos + vdown, &color_material);
 		
 		
 		glfwSwapBuffers (window);
