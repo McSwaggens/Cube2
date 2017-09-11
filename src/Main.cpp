@@ -198,8 +198,8 @@ int main ()
 	
 	
 	
-	transform_a.position = vleft;
-	transform_b.position = vright;
+	transform_a.position = vzero;
+	transform_b.position = vleft * 20;
 	
 	while (looping)
 	{
@@ -211,6 +211,8 @@ int main ()
 		
 		// printf ("[Camera] X:%f, Y:%f\n", camera->position.x, camera->position.y);
 		// printf ("[Position] X:%f, Y:%f\n", pos.x, pos.y);
+		
+		
 		
 		
 		Time::Update ();
@@ -257,15 +259,38 @@ int main ()
 			camera->position.x -= movespeed * Time::delta;
 		}
 		
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+		{
+			camera->rotation += 1 * Time::delta;
+		}
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+		{
+			camera->rotation -= 1 * Time::delta;
+		}
+		
 		camera->AddZoom(-Mouse::scroll.y * 2);
 		
 		//pos = Mouse::GetWorldPosition(camera);
 		
 		
+		Vector mouse_pos = vzero;
 		
 		
-		Vector mouse_pos = Mouse::GetWorldPosition(camera);
 		
+		
+		static Vector velocity = (vright * 10);
+		
+		velocity = velocity - (velocity * Time::delta);
+		Vector displacement = velocity * Time::delta;
+		
+		
+		printf ("velocity = %f\n", velocity.y);
+		
+		
+		transform_a.position += displacement;
+		
+		printf ("y = %f\n", transform_a.position.x);
+		printf ("time = %f\n", Time::time);
 		
 		//printf ("Angle: %f\n", Radians(RotationBetween(transform_b.position, mouse_pos)));
 		
@@ -273,6 +298,9 @@ int main ()
 		
 		// transform_a.position = mouse_pos.Normalized () * 3.0f;
 		// transform_a.rotation = RotationBetween(transform_a.position, mouse_pos);
+		
+		
+		camera->UpdatePVMatrix ();
 		
 		
 		glEnableVertexAttribArray (0);
