@@ -28,6 +28,12 @@ public:
 	Vector _GetActual ();
 	Vector GetReal (Vector v);
 	float GetYAspect ();
+	void UpdatePVMatrix ();
 	glm::mat4 GenerateMVPMatrix (Transform transform);
 	glm::mat4 GenerateMVPMatrix (Vector v);
+	
+private:
+	
+	glm::mat4 pv_matrix;
+	
 };

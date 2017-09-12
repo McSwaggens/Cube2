@@ -59,20 +59,23 @@ Vector Camera::GetReal (Vector v)
 	return Vector (mv.x, mv.y);
 }
 
-
+void Camera::UpdatePVMatrix ()
+{
+	mat4 projection = ortho(0.0f, _ASPECT, 0.0f, -1.0f, 1.0f);
+	
+	mat4 view;
+	Vector normalized_camera_position = this->GetActual ();
+	view = translate(view, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
+	view = rotate(view, rotation, vec3(0.0f, 0.0f, 1.0f));
+	
+	this->pv_matrix = projection * view;
+}
 
 
 //TODO: Put model matrix generationa and projection matrix into independant methods
 
 glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 {
-	
-	mat4 projection = ortho(0.0f, _ASPECT, 0.0f, -1.0f, 1.0f);
-	
-	mat4 view;
-	Vector normalized_camera_position = this->GetActual ();
-	view = translate(view, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
-	
 	mat4 model;
 	model = translate(model, vec3(transform.position.x, transform.position.y, 0));
 	model = rotate(model, Radians(transform.rotation), vec3(0.0f, 0.0f, 1.0f));
@@ -80,7 +83,7 @@ glm::mat4 Camera::GenerateMVPMatrix (Transform transform)
 	//? Divide the transforms x and y scale by 2, because the vector coordinates are between -1 and +1, the net size of which is 2.
 	model = scale(model, vec3(transform.scale.x/2, transform.scale.y/2, 1.0f));
 	
-	mat4 mvp = projection * view * model;
+	mat4 mvp = this->pv_matrix * model;
 	
 	return mvp;
 }
@@ -92,6 +95,8 @@ glm::mat4 Camera::GenerateMVPMatrix (Vector v)
 	mat4 view;
 	Vector normalized_camera_position = this->GetActual ();
 	view = translate(view, vec3(normalized_camera_position.x, normalized_camera_position.y, 0));
+	
+	
 	
 	mat4 model;
 	model = translate(model, vec3(v.x, v.y, 0));
