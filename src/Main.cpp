@@ -325,8 +325,8 @@ int main ()
 		
 		//Graphics::DrawLine (camera, vzero, vone, &color_material);
 		
-		Graphics::DrawLine (camera, mouse_pos + vleft, mouse_pos + vright, color_material);
-		Graphics::DrawLine (camera, mouse_pos + vup, mouse_pos + vdown, color_material);
+		Graphics::DrawLine (camera, mouse_pos + vleft, mouse_pos + vright, white);
+		Graphics::DrawLine (camera, mouse_pos + vup, mouse_pos + vdown, red);
 		
 		
 		glfwSwapBuffers (window);
