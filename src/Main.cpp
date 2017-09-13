@@ -29,17 +29,12 @@
 #include "Vector.h"
 #include "RayTracing.h"
 #include "Graphics.h"
-#include "DefaultMaterials.h"
+#include "Defaults.h"
 
 
 // CODE
 
-std::string GetWorkingDirectory ()
-{
-	char path[FILENAME_MAX];
-	getcwd(path, FILENAME_MAX);
-	return std::string(path);
-}
+std::string GetWorkingDirectory ();
 
 Camera* camera = new Camera ();
 Transform transform_a;
@@ -102,12 +97,6 @@ int main ()
 	}
 	
 	std::string path = GetWorkingDirectory ();
-	Shader* shader = ShaderForge::CreateShader (path + "/src/shaders/test.glsl");
-	Shader* tex_shader = ShaderForge::CreateShader (path + "/src/shaders/Textured.glsl");
-	Shader* blend_shader = ShaderForge::CreateShader (path + "/src/shaders/Blend.glsl");
-	Shader* color_shader = ShaderForge::CreateShader (path + "/src/shaders/Color.glsl");
-	
-	//glfwSetInputMode (window, GLFW_STICKY_KEYS, GL_TRUE);
 	
 	bool looping = true;
 	
@@ -116,8 +105,6 @@ int main ()
 	glfwSetFramebufferSizeCallback (window, framebuffer_size_callback);
 	glfwSetKeyCallback (window, keyCallback);
 	Mouse::Initialize(window);
-	
-	
 	
 	
 	
@@ -172,29 +159,20 @@ int main ()
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glDepthFunc (GL_LESS);
 	
+	//? Init all default shaders and materials
+	InitDefaults ();
+	
 	
 	
 	Texture* texture_a = new Texture ((path + "/src/textures/tux.png").c_str()); // 1
 	Texture* texture_b = new Texture ((path + "/src/textures/bricks.bmp").c_str()); // 2
 	
-	MATERIAL(Blend)
-		M_TEXTURE(tex)
-		M_TEXTURE(tex2)
-	M_END_INIT(blend_material, blend_shader); 
-	
-	MATERIAL(Color)
-		M_COLOR(in_color)
-	M_END_INIT(color_material, color_shader); 
-	
-	color_material.in_color.data = Color (1, 0, 1);
-	
-	blend_material.tex.data = texture_a;
-	blend_material.tex2.data = texture_b;
-	
-	//glBindTexture (GL_TEXTURE_2D, texture_a->texture_id);
-	//glUniform1i(glGetUniformLocation(tex_shader->program_id, "tex"), 0);
 	
 	
+	color_material->in_color.data = Color (1, 0, 1);
+	
+	blend_material->tex.data = texture_a;
+	blend_material->tex2.data = texture_b;
 	
 	
 	
@@ -329,16 +307,14 @@ int main ()
 		
 		
 		mat4 mvp_a = camera->GenerateMVPMatrix (transform_a);
-		blend_material.Enable (mvp_a);
-		
+		blend_material->Enable (mvp_a);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
-		blend_material.Disable ();
-		
+		blend_material->Disable ();
 		
 		mat4 mvp_b = camera->GenerateMVPMatrix (transform_b);
-		blend_material.Enable (mvp_b);
+		blend_material->Enable (mvp_b);
 		glDrawArrays (GL_TRIANGLES, 0, 6);
-		blend_material.Disable ();
+		blend_material->Disable ();
 		
 		glDisableVertexAttribArray (0);
 		glDisableVertexAttribArray (1);
@@ -349,8 +325,8 @@ int main ()
 		
 		//Graphics::DrawLine (camera, vzero, vone, &color_material);
 		
-		Graphics::DrawLine (camera, mouse_pos + vleft, mouse_pos + vright, &color_material);
-		Graphics::DrawLine (camera, mouse_pos + vup, mouse_pos + vdown, &color_material);
+		Graphics::DrawLine (camera, mouse_pos + vleft, mouse_pos + vright, color_material);
+		Graphics::DrawLine (camera, mouse_pos + vup, mouse_pos + vdown, color_material);
 		
 		
 		glfwSwapBuffers (window);
@@ -361,8 +337,6 @@ int main ()
 			looping = false;
 		}
 	}
-	
-	shader->Dispose ();
 	
 	glDeleteBuffers (1, &vertex_buffer);
 	glDeleteBuffers (1, &uv_buffer);
