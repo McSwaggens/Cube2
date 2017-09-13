@@ -1,6 +1,18 @@
 #include "Color.h"
 
 //?
+//? ─── GLOBAL COLORS ──────────────────────────────────────────────────────────────
+//?
+
+const Color black (0);
+const Color white (1);
+const Color red (1, 0, 0);
+const Color green (0, 1, 0);
+const Color blue (0, 0, 1);
+const Color pink (1, 0, 1);
+
+
+//?
 //? ─── COLOR ──────────────────────────────────────────────────────────────────────
 //?
 
