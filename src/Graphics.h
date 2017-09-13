@@ -22,8 +22,8 @@ namespace Graphics
 {
 	void InitGraphics ();
 	void DrawQuad (Camera* camera, Transform* transform, Material* material);
-	void DrawLineRaw (Vector a, Vector b, Material* material);
-	void DrawLine (Camera* camera, Vector a, Vector b, Material* material);
+	void DrawLineRaw (Vector a, Vector b, Color color);
+	void DrawLine (Camera* camera, Vector a, Vector b, Color color);
 }
 
 

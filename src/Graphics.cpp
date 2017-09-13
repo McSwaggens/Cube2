@@ -1,6 +1,7 @@
 #include "Graphics.h"
 
 #include "OpenGL.h"
+#include "Defaults.h"
 
 
 //?
@@ -33,7 +34,7 @@ void Graphics::DrawQuad (Camera* camera, Transform* transform, Material* materia
 	
 }
 
-void Graphics::DrawLineRaw (Vector a, Vector b, Material* material)
+void Graphics::DrawLineRaw (Vector a, Vector b, Color color)
 {
 	
 	GLfloat line_vertex_buffer[] =
@@ -47,7 +48,9 @@ void Graphics::DrawLineRaw (Vector a, Vector b, Material* material)
 	glBindBuffer (GL_ARRAY_BUFFER, line_vertex_buffer_id);
 	glBufferData (GL_ARRAY_BUFFER, sizeof(line_vertex_buffer), line_vertex_buffer, GL_STATIC_DRAW);
 	
-	material->Enable(mat4(1));
+	
+	color_material->in_color.data = color;
+	color_material->Enable(mat4(1));
 	
 	
 	glEnableVertexAttribArray (0);
@@ -78,7 +81,7 @@ void Graphics::DrawLineRaw (Vector a, Vector b, Material* material)
 	glDrawArrays (GL_LINES, 0, 2);
 	
 	
-	material->Disable();
+	color_material->Disable();
 	
 	glDisableVertexAttribArray (0);
 	glDisableVertexAttribArray (1);
@@ -87,12 +90,12 @@ void Graphics::DrawLineRaw (Vector a, Vector b, Material* material)
 	
 }
 
-void Graphics::DrawLine (Camera* camera, Vector a, Vector b, Material* material)
+void Graphics::DrawLine (Camera* camera, Vector a, Vector b, Color color)
 {
 	Vector ra = camera->GetReal (a);
 	Vector rb = camera->GetReal (b);
 	
-	DrawLineRaw (ra, rb, material);
+	DrawLineRaw (ra, rb, color);
 }
 
 //? ────────────────────────────────────────────────────────────────────────────────
