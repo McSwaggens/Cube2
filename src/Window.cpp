@@ -2,7 +2,3 @@
 
 Vector Window::resolution;
 GLFWwindow* Window::window;
-
-void Window::Update ()
-{
-}

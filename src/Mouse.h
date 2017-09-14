@@ -9,14 +9,13 @@
 
 #include "Vector.h"
 #include "Camera.h"
-#include "OpenGL.h"
 
 namespace Mouse
 {
 	extern Vector scroll;
 	extern Vector screen_position;
 	
-	void Initialize (GLFWwindow* window);
+	void Initialize ();
 	void Update ();
 	Vector GetWorldPosition (Camera* camera);
 }

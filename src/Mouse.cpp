@@ -5,7 +5,6 @@
 
 Vector Mouse::scroll;
 Vector Mouse::screen_position;
-GLFWwindow* window;
 
 void ScrollCallBack (GLFWwindow* window, double x, double y)
 {
@@ -13,16 +12,15 @@ void ScrollCallBack (GLFWwindow* window, double x, double y)
 	Mouse::scroll.y = y;
 }
 
-void Mouse::Initialize (GLFWwindow* _window)
+void Mouse::Initialize ()
 {
-	window = _window;
-	glfwSetScrollCallback (window, ScrollCallBack);
+	glfwSetScrollCallback (Window::window, ScrollCallBack);
 }
 
 void Mouse::Update ()
 {
 	double x, y;
-	glfwGetCursorPos(window, &x, &y);
+	glfwGetCursorPos(Window::window, &x, &y);
 	
 	Mouse::screen_position.x = x;
 	Mouse::screen_position.y = y;

@@ -2,7 +2,7 @@
 
 /* Window.h
 	Description:
-		Window class
+		Window Class
 */
 
 #pragma once
@@ -14,6 +14,4 @@ namespace Window
 {
 	extern Vector resolution;
 	extern GLFWwindow* window;
-	
-	void Update ();
 };
