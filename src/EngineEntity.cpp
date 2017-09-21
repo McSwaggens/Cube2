@@ -4,5 +4,8 @@
 
 EngineEntity::EngineEntity ()
 {
-	engine->Register (this);
+}
+
+EngineEntity::~EngineEntity ()
+{
 }

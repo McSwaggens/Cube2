@@ -17,6 +17,7 @@ class EngineEntity : public Entity
 {
 public:
 	EngineEntity ();
+	~EngineEntity ();
 	
 	virtual void EngineStart () { };
 	virtual void OnEngineShutdown () { };
