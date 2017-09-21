@@ -5,8 +5,6 @@
 
 using namespace glm;
 
-const Camera* main_camera = new Camera ();
-
 #define _ASPECT this->zoom, -Y_ASPECT
 #define Y_ASPECT ((this->zoom) / (16.0f / 9.0f))
 
