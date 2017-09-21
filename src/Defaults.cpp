@@ -44,6 +44,13 @@ void InitDefaults ()
 	blend_material = new BlendMaterial (blend_shader);
 	blend_material->Init ();
 	
+	
+	Texture* texture_a = new Texture ((path + "/src/textures/tux.png").c_str());
+	Texture* texture_b = new Texture ((path + "/src/textures/bricks.bmp").c_str());
+	
+	blend_material->tex.data = texture_a;
+	blend_material->tex2.data = texture_b;
+	
 	//?
 	//? ─── TEXTURE MATERIAL ───────────────────────────────────────────────────────────
 	//?
