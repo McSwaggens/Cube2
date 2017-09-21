@@ -60,6 +60,11 @@ template<typename T>
 std::vector<T> SafeVector<T>::Sort ()
 {
 	
+	for (int i = 0; i < remove_stack.size(); i++)
+	{
+		add_stack.erase (std::remove(add_stack.begin (), add_stack.end (), remove_stack[i]), add_stack.end());
+	}
+	
 	for (int i = 0; i < add_stack.size(); i++)
 	{
 		data.push_back (add_stack[i]);
