@@ -1,8 +1,11 @@
 #include "Entity.h"
 
-#include "Engine.h"
+#include <stdio.h>
 
 Entity::Entity ()
 {
-	engine->Register (this);
+}
+
+Entity::~Entity ()
+{
 }

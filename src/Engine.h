@@ -8,11 +8,15 @@
 #pragma once
 
 #include <vector>
+#include <stdio.h>
 
 #include "Game.h"
 #include "Entity.h"
 #include "EngineEntity.h"
+#include "Renderer.h"
 #include "SafeVector.h"
+#include "Memory/Master.h"
+#include "Memory/Handle.h"
 
 //?
 //? ─── FORWARD DECLARATION ────────────────────────────────────────────────────────
@@ -38,13 +42,39 @@ public:
 	bool IsRunning ();
 	void Shutdown ();
 	
-	void Register (Entity* entity);
-	void Register (EngineEntity* entity);
+	template<typename T>
+	Handle<T> CreateEntity ()
+	{
+		Master* master = new Master(new T());
+		RegisterEntity (master);
+		return Handle<T> (master->node);
+	}
+	
+	template<typename T>
+	Handle<T> CreateEngineEntity ()
+	{
+		T* t = new T();
+		Master* master = new Master(t);
+		RegisterEngineEntity (master);
+		return Handle<T> (master->node);
+	}
+	
+	void InitializeSelfReference (Master* master);
+	
+	void RegisterEntity (Master* entity);
+	void RegisterEngineEntity (Master* entity);
+	// void Register (Master<Renderer> renderer);
+	
+	
+	void DestroyEntity (Master* entity);
+	void DestroyEngineEntity (Master* engine_entity);
+	// void Destroy (Master<Renderer> renderer);
 	
 private:
 	
-	SafeVector<Entity*> entities;
-	SafeVector<EngineEntity*> engine_entities;
+	SafeVector<Master*> entities;
+	SafeVector<Master*> engine_entities;
+	SafeVector<Master*> renderers;
 	bool running;
 	
 	void Loop ();

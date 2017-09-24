@@ -7,12 +7,14 @@
 
 #pragma once
 
+#include "Object.h"
+
 //?
 //? ─── ENTITY ─────────────────────────────────────────────────────────────────────
 //?
 
 
-class Entity
+class Entity : public Object
 {
 public:
 	Entity ();

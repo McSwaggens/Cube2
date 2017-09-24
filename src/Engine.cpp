@@ -1,13 +1,16 @@
 #include "Engine.h"
+
 #include "Time.h"
-#include <stdio.h>
 #include "OpenGL.h"
 #include "WorldObject.h"
 #include "Window.h"
 #include "Mouse.h"
 #include "Defaults.h"
 #include "Material.h"
+#include "Graphics.h"
+
 #include <string>
+#include <stdio.h>
 
 using namespace Window;
 
@@ -39,9 +42,11 @@ void Engine::Start ()
 		return;
 	}
 	
+	Graphics::InitGraphics ();
 	InitDefaults ();
 	
-	game = new Game ();
+	Handle<Game> _game = CreateEngineEntity<Game> ();
+	
 	
 	running = true;
 	
@@ -70,6 +75,10 @@ void KeyCallback (GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	
 }
+
+Texture* texture_a;
+Texture* texture_b;
+
 
 bool Engine::InitOpenGL ()
 {
@@ -120,9 +129,12 @@ bool Engine::InitOpenGL ()
 	
 	Mouse::Initialize();
 	
+	GLuint VAO;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 	
-	
-	
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	
 	return true;
@@ -149,15 +161,18 @@ void Engine::Loop ()
 
 void Engine::Update ()
 {
-	static std::vector<Entity*> new_entities;
+	static std::vector<Master*> new_entities;
+	
+	HandleEvents ();
 	
 	Time::Update ();
+	Mouse::Update ();
 	
 	if (new_entities.size() > 0)
 	{
 		for (int i = 0; i < new_entities.size(); i++)
 		{
-			Entity* entity = new_entities[i];
+			Entity* entity = (Entity*)new_entities[i]->object;
 			
 			entity->Start ();
 		}
@@ -165,33 +180,31 @@ void Engine::Update ()
 		new_entities.clear ();
 	}
 	
-	std::vector<EngineEntity*>* engine_entities = &this->engine_entities.data;
-	std::vector<Entity*>* entities = &this->entities.data;
-	
-	
-	for (int i = 0; i < engine_entities->size(); i++)
+	for (int i = 0; i < engine_entities.data.size(); i++)
 	{
-		EngineEntity* engine_entity = engine_entities->at(i);
+		EngineEntity* engine_entity = (EngineEntity*)engine_entities.data[i]->object;
 		engine_entity->EnginePreUpdate ();
 	}
 	
 	
-	for (int i = 0; i < entities->size(); i++)
+	for (int i = 0; i < entities.data.size(); i++)
 	{
-		Entity* entity = entities->at(i);
+		Entity* entity = (Entity*)entities.data[i]->object;
 		entity->Update ();
 	}
 	
 	
-	for (int i = 0; i < engine_entities->size(); i++)
+	for (int i = 0; i < engine_entities.data.size(); i++)
 	{
-		EngineEntity* engine_entity = engine_entities->at(i);
+		EngineEntity* engine_entity = (EngineEntity*)engine_entities.data[i]->object;
 		engine_entity->EnginePostUpdate ();
 	}
 	
 	
-	std::vector<Entity*> _new_entities = this->entities.Sort ();
+	std::vector<Master*> _new_entities = this->entities.Sort();
 	new_entities.insert (new_entities.end(), _new_entities.begin(), _new_entities.end());
+	
+	// this->renderers.Sort ();
 	
 	static float last_time = 0;
 	static int frames = 0;
@@ -209,9 +222,33 @@ void Engine::Update ()
 	
 }
 
+Camera* camera = new Camera ();
+
 void Engine::Render ()
 {
-	//TODO: Render scene
+	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	camera->AddZoom(-Mouse::scroll.y * 2);
+	camera->UpdatePVMatrix ();
+	
+	Vector mouse_pos = Mouse::GetWorldPosition (camera);
+	
+	// std::vector<Master<Renderer>>* renderers = &this->renderers.data;
+	
+	// for (int i = 0; i < renderers->size(); i++)
+	// {
+	// 	Renderer* renderer = renderers->at(i).value;
+		
+	// 	renderer->Render (camera);
+	// }
+	
+	
+	Graphics::DrawLine (camera, vleft, vright, white);
+	Graphics::DrawLine (camera, vup, vdown, red);
+	
+	
+	glfwSwapBuffers (window);
 }
 
 //?
@@ -220,22 +257,69 @@ void Engine::Render ()
 
 void Engine::HandleEvents ()
 {
-	//TODO: Handle events
+	glfwPollEvents ();
+	
+	bool window_closed = glfwWindowShouldClose (window);
+	
+	if (window_closed || glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		Shutdown ();
+	}
+	
 }
 
 //?
 //? ─── REGISTERS ──────────────────────────────────────────────────────────────────
 //?
 
-void Engine::Register (Entity* entity)
+// template<typename T, typename = std::enable_if<std::is_base_of<Entity, T>::value>>
+// T** Engine::Create ()
+// {
+// 	T* t = new T();
+	
+// 	this->Register ((Entity*)t);
+	
+// 	return &t;
+// }
+
+void Engine::InitializeSelfReference (Master* master)
 {
+	// Set a reference to itself
+	master->object->object_memory.master = master;
+}
+
+void Engine::RegisterEntity (Master* entity)
+{
+	InitializeSelfReference (entity);
 	this->entities.Add (entity);
 }
 
-void Engine::Register (EngineEntity* entity)
+void Engine::RegisterEngineEntity (Master* entity)
 {
+	InitializeSelfReference (entity);
+	this->entities.Add (entity);
 	this->engine_entities.Add (entity);
 }
+
+// void Engine::Register (Master<Renderer> renderer)
+// {
+// 	this->renderers.Add (renderer);
+// }
+
+void Engine::DestroyEntity (Master* entity)
+{
+	entities.Remove (entity);
+}
+
+// void Engine::Destroy (Master<EngineEntity> engine_entity)
+// {
+// 	engine_entities.Remove(engine_entity);
+// }
+
+// void Engine::Destroy (Master<Renderer> renderer)
+// {
+// 	renderers.Remove(renderer);
+// }
 
 //?
 //? ─── MISC ───────────────────────────────────────────────────────────────────────
