@@ -201,8 +201,26 @@ void Engine::Update ()
 	}
 	
 	
+	// Collect all removed objects before they're sorted out
+	std::vector<Master*> removed_objects;
+	removed_objects.insert (removed_objects.end(), entities.remove_stack.begin(), entities.remove_stack.end());
+	removed_objects.insert (removed_objects.end(), engine_entities.remove_stack.begin(), engine_entities.remove_stack.end());
+	
+	// Removed all duplicates
+	std::sort (removed_objects.begin(), removed_objects.end());
+	removed_objects.erase (std::unique(removed_objects.begin (), removed_objects.end()), removed_objects.end());
+	
+	// Sort the SafeVectors and fill the static "new_entities" vector above
 	std::vector<Master*> _new_entities = this->entities.Sort();
 	new_entities.insert (new_entities.end(), _new_entities.begin(), _new_entities.end());
+	std::vector<Master*> _new_engine_entities = this->engine_entities.Sort();
+	
+	// Delete the cached masters
+	for (int i = 0; i < removed_objects.size (); i++)
+	{
+		Master* master = removed_objects[i];
+		delete master;
+	}
 	
 	// this->renderers.Sort ();
 	
@@ -301,25 +319,17 @@ void Engine::RegisterEngineEntity (Master* entity)
 	this->engine_entities.Add (entity);
 }
 
-// void Engine::Register (Master<Renderer> renderer)
-// {
-// 	this->renderers.Add (renderer);
-// }
+void Engine::DestroyObject (Master* master)
+{
+	entities.Remove (master);
+	engine_entities.Remove (master);
+	// renderers.Remove (master);
+}
 
 void Engine::DestroyEntity (Master* entity)
 {
 	entities.Remove (entity);
 }
-
-// void Engine::Destroy (Master<EngineEntity> engine_entity)
-// {
-// 	engine_entities.Remove(engine_entity);
-// }
-
-// void Engine::Destroy (Master<Renderer> renderer)
-// {
-// 	renderers.Remove(renderer);
-// }
 
 //?
 //? ─── MISC ───────────────────────────────────────────────────────────────────────

@@ -66,6 +66,8 @@ public:
 	// void Register (Master<Renderer> renderer);
 	
 	
+	void DestroyObject (Master* master);
+	
 	void DestroyEntity (Master* entity);
 	void DestroyEngineEntity (Master* engine_entity);
 	// void Destroy (Master<Renderer> renderer);

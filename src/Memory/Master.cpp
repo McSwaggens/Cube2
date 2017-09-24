@@ -1,5 +1,7 @@
 #include "Master.h"
 
+#include "../Engine.h"
+
 #include <stdio.h>
 
 Master::Master (Object* object)
@@ -11,8 +13,8 @@ Master::Master (Object* object)
 
 Master::~Master ()
 {
-	node->master = nullptr;
-	delete object;
+	printf ("~~~ Destructor!\n");
+	Wipe ();
 }
 
 void Master::Increase ()
@@ -31,8 +33,29 @@ void Master::Decrease ()
 	{
 		printf ("Decrease, Destroying object\n", count);
 		
-		node->master = nullptr;
-		
-		delete object;
+		Wipe ();
+		MarkForDelete ();
 	}
+}
+
+void Master::Wipe ()
+{
+	if (object)
+	{
+		delete object;
+		object = nullptr;
+	}
+	
+	if (node)
+	{
+		node->master = nullptr;
+	}
+	
+	printf ("Wipe!\n");
+}
+
+
+void Master::MarkForDelete ()
+{
+	engine->DestroyObject (this);
 }

@@ -27,8 +27,6 @@ public:
 	
 	std::vector<T> Sort ();
 	
-private:
-	
 	std::vector<T> remove_stack;
 	std::vector<T> add_stack;
 	

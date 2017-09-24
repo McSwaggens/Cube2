@@ -23,4 +23,6 @@ public:
 	~Master ();
 	void Increase ();
 	void Decrease ();
+	void Wipe ();
+	void MarkForDelete ();
 };

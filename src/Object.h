@@ -22,4 +22,6 @@ class Object
 public:
 	virtual ~Object ();
 	ObjectMemory object_memory;
+	void Keep ();
+	void Destroy ();
 };

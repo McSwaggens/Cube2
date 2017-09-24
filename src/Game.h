@@ -23,6 +23,7 @@ public:
 	
 	Game ();
 	
+	virtual void EnginePreUpdate ();
 	virtual void Start ();
 	virtual void Update ();
 };

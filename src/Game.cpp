@@ -11,10 +11,13 @@ void Game::Update ()
 {
 }
 
+void Game::EnginePreUpdate ()
+{
+	
+}
 
 void Game::Start ()
 {
 	printf ("Hello World from Game.cpp!\n");
-	
-	// engine->DestroyEngineEntity ();
+	Destroy ();
 }
