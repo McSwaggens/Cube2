@@ -65,18 +65,16 @@ public:
 	void RegisterEngineEntity (Master* entity);
 	// void Register (Master<Renderer> renderer);
 	
-	
 	void DestroyObject (Master* master);
-	
-	void DestroyEntity (Master* entity);
-	void DestroyEngineEntity (Master* engine_entity);
-	// void Destroy (Master<Renderer> renderer);
 	
 private:
 	
 	SafeVector<Master*> entities;
 	SafeVector<Master*> engine_entities;
 	SafeVector<Master*> renderers;
+	
+	std::vector<Master*> remove_stack;
+	
 	bool running;
 	
 	void Loop ();
@@ -84,6 +82,7 @@ private:
 	void Render ();
 	void HandleEvents ();
 	bool InitOpenGL ();
+	void CalculateRemoveStack ();
 	
 	void ClearOpenGL ();
 	void ClearMemory ();

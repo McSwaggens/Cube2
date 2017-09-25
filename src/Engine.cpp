@@ -8,6 +8,7 @@
 #include "Defaults.h"
 #include "Material.h"
 #include "Graphics.h"
+#include "Util.h"
 
 #include <string>
 #include <stdio.h>
@@ -201,26 +202,25 @@ void Engine::Update ()
 	}
 	
 	
-	// Collect all removed objects before they're sorted out
-	std::vector<Master*> removed_objects;
-	removed_objects.insert (removed_objects.end(), entities.remove_stack.begin(), entities.remove_stack.end());
-	removed_objects.insert (removed_objects.end(), engine_entities.remove_stack.begin(), engine_entities.remove_stack.end());
-	
-	// Removed all duplicates
-	std::sort (removed_objects.begin(), removed_objects.end());
-	removed_objects.erase (std::unique(removed_objects.begin (), removed_objects.end()), removed_objects.end());
+	// Removed all duplicates in the remove_stack
+	std::sort (remove_stack.begin(), remove_stack.end());
+	remove_stack.erase (std::unique(remove_stack.begin (), remove_stack.end()), remove_stack.end());
 	
 	// Sort the SafeVectors and fill the static "new_entities" vector above
-	std::vector<Master*> _new_entities = this->entities.Sort();
+	std::vector<Master*> _new_entities = this->entities.Sort(remove_stack);
 	new_entities.insert (new_entities.end(), _new_entities.begin(), _new_entities.end());
-	std::vector<Master*> _new_engine_entities = this->engine_entities.Sort();
+	std::vector<Master*> _new_engine_entities = this->engine_entities.Sort(remove_stack);
+	
 	
 	// Delete the cached masters
-	for (int i = 0; i < removed_objects.size (); i++)
+	for (int i = 0; i < remove_stack.size (); i++)
 	{
-		Master* master = removed_objects[i];
+		Master* master = remove_stack[i];
 		delete master;
 	}
+	
+	CalculateRemoveStack ();
+	
 	
 	// this->renderers.Sort ();
 	
@@ -303,7 +303,7 @@ void Engine::HandleEvents ()
 void Engine::InitializeSelfReference (Master* master)
 {
 	// Set a reference to itself
-	master->object->object_memory.master = master;
+	master->object->engine_data.master = master;
 }
 
 void Engine::RegisterEntity (Master* entity)
@@ -321,14 +321,16 @@ void Engine::RegisterEngineEntity (Master* entity)
 
 void Engine::DestroyObject (Master* master)
 {
-	entities.Remove (master);
-	engine_entities.Remove (master);
-	// renderers.Remove (master);
+	remove_stack.push_back (master);
 }
 
-void Engine::DestroyEntity (Master* entity)
+void Engine::CalculateRemoveStack ()
 {
-	entities.Remove (entity);
+	Util::RemoveVectorFromVector<Master*> (entities.data, remove_stack);
+	Util::RemoveVectorFromVector<Master*> (engine_entities.data, remove_stack);
+	Util::RemoveVectorFromVector<Master*> (renderers.data, remove_stack);
+	
+	remove_stack.clear ();
 }
 
 //?

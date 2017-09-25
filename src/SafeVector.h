@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <algorithm>
+#include "Util.h"
 
 //?
 //? ─── SAFEVECTOR ─────────────────────────────────────────────────────────────────
@@ -21,15 +22,10 @@ class SafeVector
 public:
 	
 	std::vector<T> data;
-	
-	void Add (T t);
-	void Remove (T t);
-	
-	std::vector<T> Sort ();
-	
-	std::vector<T> remove_stack;
 	std::vector<T> add_stack;
 	
+	void Add (T t);
+	std::vector<T> Sort (std::vector<T>& remove_stack);
 };
 
 
@@ -48,19 +44,17 @@ void SafeVector<T>::Add (T t)
 
 
 template<typename T>
-void SafeVector<T>::Remove (T t)
+std::vector<T> SafeVector<T>::Sort (std::vector<T>& remove_stack)
 {
-	this->remove_stack.push_back (t);
-}
-
-
-template<typename T>
-std::vector<T> SafeVector<T>::Sort ()
-{
-	
-	for (int i = 0; i < remove_stack.size(); i++)
+	if (add_stack.size() == 0)
 	{
-		add_stack.erase (std::remove(add_stack.begin (), add_stack.end (), remove_stack[i]), add_stack.end());
+		return std::vector<T>();
+	}
+	
+	
+	if (remove_stack.size() > 0)
+	{
+		Util::RemoveVectorFromVector<T> (add_stack, remove_stack);
 	}
 	
 	for (int i = 0; i < add_stack.size(); i++)
@@ -68,14 +62,8 @@ std::vector<T> SafeVector<T>::Sort ()
 		data.push_back (add_stack[i]);
 	}
 	
-	for (int i = 0; i < remove_stack.size(); i++)
-	{
-		data.erase (std::remove(data.begin (), data.end (), remove_stack[i]), data.end());
-	}
-	
 	std::vector<T> add_stack_copy = add_stack;
 	
-	remove_stack.clear ();
 	add_stack.clear ();
 	
 	return add_stack_copy;
