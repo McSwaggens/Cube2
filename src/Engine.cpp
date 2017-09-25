@@ -46,7 +46,7 @@ void Engine::Start ()
 	Graphics::InitGraphics ();
 	InitDefaults ();
 	
-	Handle<Game> _game = CreateEngineEntity<Game> ();
+	Handle<Game> _game = Create<Game> ();
 	
 	
 	running = true;
@@ -309,17 +309,24 @@ void Engine::InitializeSelfReference (Master* master)
 	master->object->engine_data.master = master;
 }
 
-void Engine::RegisterEntity (Master* entity)
+void Engine::RegisterObject (Master* entity)
 {
 	InitializeSelfReference (entity);
-	this->entities.Add (entity);
-}
-
-void Engine::RegisterEngineEntity (Master* entity)
-{
-	InitializeSelfReference (entity);
-	this->entities.Add (entity);
-	this->engine_entities.Add (entity);
+	
+	if (entity->object->GetFlag(ENTITY))
+	{
+		this->entities.Add (entity);
+	}
+	
+	if (entity->object->GetFlag(ENGINE_ENTITY))
+	{
+		this->engine_entities.Add (entity);
+	}
+	
+	if (entity->object->GetFlag(RENDERER))
+	{
+		renderers.Add (entity);
+	}
 }
 
 void Engine::DestroyObject (Master* master)

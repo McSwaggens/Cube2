@@ -43,28 +43,15 @@ public:
 	void Shutdown ();
 	
 	template<typename T>
-	Handle<T> CreateEntity ()
+	Handle<T> Create ()
 	{
 		Master* master = new Master(new T());
-		RegisterEntity (master);
-		return Handle<T> (master->node);
-	}
-	
-	template<typename T>
-	Handle<T> CreateEngineEntity ()
-	{
-		T* t = new T();
-		Master* master = new Master(t);
-		RegisterEngineEntity (master);
+		RegisterObject (master);
 		return Handle<T> (master->node);
 	}
 	
 	void InitializeSelfReference (Master* master);
-	
-	void RegisterEntity (Master* entity);
-	void RegisterEngineEntity (Master* entity);
-	// void Register (Master<Renderer> renderer);
-	
+	void RegisterObject (Master* entity);
 	void DestroyObject (Master* master);
 	
 private:
