@@ -4,6 +4,7 @@
 
 EngineEntity::EngineEntity ()
 {
+	EnableFlag (ENGINE_ENTITY);
 }
 
 EngineEntity::~EngineEntity ()

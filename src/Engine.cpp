@@ -176,6 +176,9 @@ void Engine::Update ()
 			Entity* entity = (Entity*)new_entities[i]->object;
 			
 			entity->Start ();
+			
+			// Enable the initialized flag
+			entity->EnableFlag (INITIALIZED);
 		}
 		
 		new_entities.clear ();
