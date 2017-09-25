@@ -17,26 +17,7 @@ Master::~Master ()
 	Wipe ();
 }
 
-void Master::Increase ()
-{
-	count++;
-	printf ("Increase, count = %i\n", count);
-}
 
-void Master::Decrease ()
-{
-	count--;
-	
-	printf ("Decrease, count = %i\n", count);
-	
-	if (count == 0)
-	{
-		printf ("Decrease, Destroying object\n", count);
-		
-		Wipe ();
-		MarkForDelete ();
-	}
-}
 
 void Master::Wipe ()
 {
@@ -49,6 +30,7 @@ void Master::Wipe ()
 	if (node)
 	{
 		node->master = nullptr;
+		node = nullptr;
 	}
 	
 	printf ("Wipe!\n");

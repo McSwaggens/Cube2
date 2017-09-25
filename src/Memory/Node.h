@@ -22,8 +22,13 @@ class Node
 {
 public:
 	Master* master;
+	int count = 0;
+	
+	void Increase ();
+	void Decrease ();
 	
 	Node (Master* master);
+	~Node ();
 };
 
 //? ────────────────────────────────────────────────────────────────────────────────

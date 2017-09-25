@@ -24,7 +24,7 @@ Object::~Object ()
 
 void Object::Keep ()
 {
-	engine_data.master->Increase ();
+	engine_data.master->node->Increase ();
 }
 
 void Object::Destroy ()

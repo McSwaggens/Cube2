@@ -16,13 +16,10 @@ class Master;
 class Master
 {
 public:
-	int count = 0;
 	Object* object;
 	Node* node;
 	Master (Object* object);
 	~Master ();
-	void Increase ();
-	void Decrease ();
 	void Wipe ();
 	void MarkForDelete ();
 };

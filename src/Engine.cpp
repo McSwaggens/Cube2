@@ -46,7 +46,9 @@ void Engine::Start ()
 	Graphics::InitGraphics ();
 	InitDefaults ();
 	
-	Handle<Game> _game = Create<Game> ();
+	{
+		Handle<Game> _game = Create<Game> ();
+	}
 	
 	
 	running = true;
@@ -55,8 +57,13 @@ void Engine::Start ()
 	
 	Loop ();
 	
+	printf ("Shutting down Engine\n");
+	
 	ClearOpenGL ();
 	ClearMemory ();
+	
+	printf ("Engine shutdown successful\n");
+	printf ("Bye!\n");
 }
 
 //?

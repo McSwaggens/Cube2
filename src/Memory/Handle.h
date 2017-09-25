@@ -13,32 +13,32 @@ public:
 	Handle (Node* node)
 	{
 		this->node = node;
-		node->master->Increase ();
+		node->Increase ();
 	}
 	
 	Handle (Handle<T>& handle)
 	{
 		this->node = handle.node;
-		node->master->Increase ();
+		node->Increase ();
 	}
 	
 	Handle (const Handle<T>& handle)
 	{
 		
 		this->node = handle.node;
-		node->master->Increase ();
+		node->Increase ();
 	}
 	
 	~Handle ()
 	{
-		this->node->master->Decrease ();
+		this->node->Decrease ();
 	}
 	
 	Handle<T>& operator = (Handle<T>& rval)
 	{
-		node->master->Decrease ();
+		node->Decrease ();
 		node = rval.node;
-		node->master->Increase ();
+		node->Increase ();
 		
 		return *this;
 	}
