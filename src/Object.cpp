@@ -8,15 +8,15 @@ Object::~Object ()
 
 void Object::Keep ()
 {
-	object_memory.master->Increase ();
+	engine_data.master->Increase ();
 }
 
 void Object::Destroy ()
 {
 	
-	engine->DestroyObject (object_memory.master);
+	engine->DestroyObject (engine_data.master);
 	
 	return;
-	object_memory.master->Wipe ();
-	object_memory.master->MarkForDelete ();
+	engine_data.master->Wipe ();
+	engine_data.master->MarkForDelete ();
 }

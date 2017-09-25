@@ -11,7 +11,7 @@ class Object;
 
 #include "Memory/Master.h"
 
-class ObjectMemory
+class EngineData
 {
 public:
 	Master* master;
@@ -21,7 +21,7 @@ class Object
 {
 public:
 	virtual ~Object ();
-	ObjectMemory object_memory;
+	EngineData engine_data;
 	void Keep ();
 	void Destroy ();
 };
