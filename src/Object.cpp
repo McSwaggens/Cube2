@@ -13,10 +13,5 @@ void Object::Keep ()
 
 void Object::Destroy ()
 {
-	
 	engine->DestroyObject (engine_data.master);
-	
-	return;
-	engine_data.master->Wipe ();
-	engine_data.master->MarkForDelete ();
 }
