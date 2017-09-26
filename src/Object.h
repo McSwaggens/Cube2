@@ -11,6 +11,8 @@ class Object;
 
 #include "Memory/Master.h"
 #include "EngineFlags.h"
+#include <string>
+#include <sstream>
 
 
 class EngineData
@@ -29,8 +31,25 @@ public:
 	void Keep ();
 	void Destroy ();
 	
+	//?
+	//? ─── FLAGS ──────────────────────────────────────────────────────────────────────
+	//?
+
+	
 	void EnableFlag (unsigned long flag);
 	void DisableFlag (unsigned long flag);
 	void SwitchFlag (unsigned long flag);
 	bool GetFlag (unsigned long flag);
+	
+	//?
+	//? ─── STRING ─────────────────────────────────────────────────────────────────────
+	//?
+	
+	virtual std::string ToString ();
+	
+	inline friend std::ostream& operator << (std::ostream& stream, Object* object)
+	{
+		stream << object->ToString();
+		return stream;
+	}
 };

@@ -17,6 +17,7 @@
 #include "SafeVector.h"
 #include "Memory/Master.h"
 #include "Memory/Handle.h"
+#include "Logger.h"
 
 //?
 //? ─── FORWARD DECLARATION ────────────────────────────────────────────────────────

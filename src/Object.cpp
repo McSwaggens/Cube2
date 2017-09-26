@@ -57,4 +57,13 @@ bool Object::GetFlag (unsigned long flag)
 	return static_cast<bool>(engine_data.flags & flag);
 }
 
+//?
+//? ─── STRING ─────────────────────────────────────────────────────────────────────
+//?
+
+std::string Object::ToString ()
+{
+	return "Object";
+}
+
 //? ────────────────────────────────────────────────────────────────────────────────

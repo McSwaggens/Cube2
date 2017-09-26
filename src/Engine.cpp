@@ -46,8 +46,14 @@ void Engine::Start ()
 	Graphics::InitGraphics ();
 	InitDefaults ();
 	
+	
 	{
 		Handle<Game> _game = Create<Game> ();
+		std::stringstream stream;
+		
+		stream << _game();
+		
+		Log (DEBUG | INFO, FILE, "Hello World ", _game());
 	}
 	
 	
