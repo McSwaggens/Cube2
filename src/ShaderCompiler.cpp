@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "Logger.h"
+
 
 std::string LoadFile (std::string path)
 {
@@ -168,6 +170,8 @@ Shader* ShaderForge::CreateShader (std::string path)
 		std::vector<char> error_message (log_length + 1);
 		glGetProgramInfoLog (program_id, log_length, NULL, &error_message[0]);
 		
+		Log (ERROR, "Shader linker error, path = ", path);
+
 		printf ("[SHADER LINK ERROR]:\n%s\n", &error_message[0]);
 		
 		return shader;
