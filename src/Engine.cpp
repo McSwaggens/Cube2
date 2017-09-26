@@ -12,7 +12,6 @@
 #include "ConsoleColors.h"
 
 #include <string>
-#include <stdio.h>
 
 using namespace Window;
 
@@ -39,8 +38,7 @@ void Engine::Start ()
 {
 	if (!InitOpenGL ())
 	{
-		
-		printf ("Aborting Engine Start...\n");
+		Log (ERROR, "OpenGL failed to initialize, aborting engine start...");
 		return;
 	}
 	
@@ -64,13 +62,12 @@ void Engine::Start ()
 	
 	Loop ();
 	
-	printf ("Shutting down Engine\n");
+	Log (INFO, "Shutting down engine");
 	
 	ClearOpenGL ();
 	ClearMemory ();
 	
-	printf ("Engine shutdown successful\n");
-	printf ("Bye!\n");
+	Log (INFO, "Engine shutdown successful\nBye!");
 }
 
 //?
@@ -99,7 +96,7 @@ bool Engine::InitOpenGL ()
 {
 	if (!glfwInit())
 	{
-		printf ("%i, Could not initialize glfw\n", stderr);
+		Log (ERROR, "Could not initialize GLFW, ErrorCode: ", stderr);
 		return false;
 	}
 	
@@ -114,7 +111,7 @@ bool Engine::InitOpenGL ()
 	if (window == NULL)
 	{
 		
-		printf ("%i, Could not create GLFW window\n", stderr);
+		Log (ERROR, "Could not create GLFW window, ErrorCode: ", stderr);
 		
 		glfwTerminate ();
 		
@@ -130,7 +127,7 @@ bool Engine::InitOpenGL ()
 	
 	if (glewInit () != GLEW_OK)
 	{
-		printf ("%i, Could not initialize glew\n", stderr);
+		Log (ERROR, "Could not initialize GLEW, ErrorCode: ", stderr);
 		
 		return false;
 	}
@@ -183,6 +180,10 @@ void Engine::Update ()
 	Time::Update ();
 	Mouse::Update ();
 	
+	//?
+	//? ─── ENTITY START ───────────────────────────────────────────────────────────────
+	//?
+	
 	if (new_entities.size() > 0)
 	{
 		for (int i = 0; i < new_entities.size(); i++)
@@ -198,6 +199,11 @@ void Engine::Update ()
 		new_entities.clear ();
 	}
 	
+	//?
+	//? ─── ENGINE PRE UPDATE ──────────────────────────────────────────────────────────
+	//?
+	
+	
 	for (int i = 0; i < engine_entities.data.size(); i++)
 	{
 		EngineEntity* engine_entity = (EngineEntity*)engine_entities.data[i]->object;
@@ -205,12 +211,19 @@ void Engine::Update ()
 	}
 	
 	
+	//?
+	//? ─── ENTITY UPDATE ──────────────────────────────────────────────────────────────
+	//?
+	
 	for (int i = 0; i < entities.data.size(); i++)
 	{
 		Entity* entity = (Entity*)entities.data[i]->object;
 		entity->Update ();
 	}
 	
+	//?
+	//? ─── ENGINE POST UPDATE ─────────────────────────────────────────────────────────
+	//?
 	
 	for (int i = 0; i < engine_entities.data.size(); i++)
 	{
@@ -218,6 +231,8 @@ void Engine::Update ()
 		engine_entity->EnginePostUpdate ();
 	}
 	
+	
+	//? ────────────────────────────────────────────────────────────────────────────────
 	
 	// Removed all duplicates in the remove_stack
 	std::sort (remove_stack.begin(), remove_stack.end());
@@ -241,15 +256,17 @@ void Engine::Update ()
 	
 	// this->renderers.Sort ();
 	
+	
+	
+	// Log the FPS every second.
+	
 	static float last_time = 0;
 	static int frames = 0;
 	frames++;
 	
-	
 	if (Time::time - last_time >= 1.0f)
 	{
-		
-		printf ("FPS: %i\n", frames);
+		Log (INFO, "FPS: ", YELLOW, frames);
 		
 		last_time = Time::time;
 		frames = 0;
@@ -307,16 +324,6 @@ void Engine::HandleEvents ()
 //? ─── REGISTERS ──────────────────────────────────────────────────────────────────
 //?
 
-// template<typename T, typename = std::enable_if<std::is_base_of<Entity, T>::value>>
-// T** Engine::Create ()
-// {
-// 	T* t = new T();
-	
-// 	this->Register ((Entity*)t);
-	
-// 	return &t;
-// }
-
 void Engine::InitializeSelfReference (Master* master)
 {
 	// Set a reference to itself
@@ -325,18 +332,20 @@ void Engine::InitializeSelfReference (Master* master)
 
 void Engine::RegisterObject (Master* entity)
 {
+	
+	// Give the entity a Master reference to itself
 	InitializeSelfReference (entity);
+	
+	// Add the master to the appropriate array base on its 
 	
 	if (entity->object->GetFlag(ENTITY))
 	{
 		this->entities.Add (entity);
 	}
-	
 	if (entity->object->GetFlag(ENGINE_ENTITY))
 	{
 		this->engine_entities.Add (entity);
 	}
-	
 	if (entity->object->GetFlag(RENDERER))
 	{
 		renderers.Add (entity);
