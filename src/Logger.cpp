@@ -29,7 +29,7 @@ std::string LoggerGetLogTypeString (unsigned char t)
 
 std::string LoggerGetLogTypeColor (unsigned char t)
 {
-	// Order the if statements from least important to most important,
+	// Order the if statements from most important to least important,
 	// this is to avoid the infos white color from overriding the errors red color-
 	// when using multiple types in the bitflag.
 	
