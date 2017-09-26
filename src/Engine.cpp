@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Graphics.h"
 #include "Util.h"
+#include "ConsoleColors.h"
 
 #include <string>
 #include <stdio.h>
@@ -53,7 +54,7 @@ void Engine::Start ()
 		
 		stream << _game();
 		
-		Log (DEBUG | INFO, FILE, "Hello World ", _game());
+		Log (ERROR, FILE, "Hello World ", _game());
 	}
 	
 	

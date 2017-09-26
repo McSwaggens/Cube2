@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "ConsoleColors.h"
+
 #include <string>
 #include <string.h>
 #include <sstream>
@@ -35,6 +37,7 @@ enum LogType : unsigned char
 
 
 std::string LoggerGetLogTypeString (unsigned char t);
+std::string LoggerGetLogTypeColor (unsigned char t);
 
 //? ────────────────────────────────────────────────────────────────────────────────
 
@@ -54,8 +57,11 @@ template<typename... Args>
 inline void Log (unsigned char log_type, Args&&... args)
 {
 	std::ostringstream stream;
-	stream << "[" << LoggerGetLogTypeString(log_type) << "]" << "\t";
+	stream << LoggerGetLogTypeColor (log_type);
+	stream << "[" << LoggerGetLogTypeString(log_type) << "]";
+	stream << RESET " ";
 	LoggerAdd (stream, std::forward<Args>(args)...);
 	stream << "\n";
+	stream << RESET;
 	printf (stream.str().c_str());
 }
