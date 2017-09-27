@@ -12,7 +12,7 @@ Transform::Transform ()
 }
 
 
-Transform::Transform (Vector position = Vector(0, 0), float rotation = 0.0f, Vector scale = Vector (1, 1))
+Transform::Transform (Vector position, float rotation, Vector scale)
 {
 	this->position = position;
 	this->scale = scale;
