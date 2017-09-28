@@ -286,6 +286,11 @@ void Engine::Render ()
 	
 	Vector mouse_pos = Mouse::GetWorldPosition (camera);
 	
+	static Transform transform;
+	
+	Graphics::DrawQuad(camera, &transform, blend_material);
+	
+	
 	// std::vector<Master<Renderer>>* renderers = &this->renderers.data;
 	
 	// for (int i = 0; i < renderers->size(); i++)

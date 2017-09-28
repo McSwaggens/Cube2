@@ -17,4 +17,5 @@ public:
 	
 	Texture ();
 	Texture (const char* image_location);
+	~Texture ();
 };
