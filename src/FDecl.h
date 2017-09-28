@@ -10,4 +10,4 @@
 #include "Engine.h"
 
 extern Engine* engine;
-extern Game* game;
+extern Handle<Game> game;

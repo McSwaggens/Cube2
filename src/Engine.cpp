@@ -20,7 +20,7 @@ using namespace Window;
 //?
 
 Engine* engine = new Engine ();
-Game* game;
+Handle<Game> game;
 
 //?
 //? ─── CONSTRUCTORS ───────────────────────────────────────────────────────────────
@@ -46,15 +46,7 @@ void Engine::Start ()
 	InitDefaults ();
 	
 	
-	{
-		Handle<Game> _game = Create<Game> ();
-		std::stringstream stream;
-		
-		stream << _game();
-		
-		Log (ERROR, FILE, "Hello World ", _game());
-	}
-	
+	game = Create<Game> ();
 	
 	running = true;
 	
