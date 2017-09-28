@@ -1,7 +1,7 @@
 #include "Mouse.h"
 
 #include "Window.h"
-#include <stdio.h>
+#include "Logger.h"
 
 Vector Mouse::scroll;
 Vector Mouse::screen_position;

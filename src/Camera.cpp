@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include "Math.h"
 
-#include <stdio.h>
+#include "Logger.h"
 
 using namespace glm;
 

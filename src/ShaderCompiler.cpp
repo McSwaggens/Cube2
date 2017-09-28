@@ -131,7 +131,7 @@ GLuint CompileShaderSource (std::string source, GLuint shader_type)
 		std::vector<char> error_message (log_length + 1);
 		glGetShaderInfoLog (shader_id, log_length, NULL, &error_message[0]);
 		
-		printf ("[SHADER COMPILE ERROR]:\n%s\n", &error_message[0]);
+		Log (ERROR, RED "[SHADER COMPILE ERROR]:\n\t" YELLOW, &error_message[0]);
 	}
 	
 	return shader_id;
@@ -172,7 +172,7 @@ Shader* ShaderForge::CreateShader (std::string path)
 		
 		Log (ERROR, "Shader linker error, path = ", path);
 
-		printf ("[SHADER LINK ERROR]:\n%s\n", &error_message[0]);
+		Log (ERROR, RED "[SHADER LINK ERROR]:\n\t" YELLOW, &error_message[0]);
 		
 		return shader;
 	}

@@ -1,8 +1,7 @@
 #include "Master.h"
 
 #include "../Engine.h"
-
-#include <stdio.h>
+#include "../Logger.h"
 
 Master::Master (Object* object)
 {
@@ -13,7 +12,7 @@ Master::Master (Object* object)
 
 Master::~Master ()
 {
-	printf ("~~~ Destructor!\n");
+	Log (DEBUG, "~~~ Destructor!");
 	Wipe ();
 }
 
@@ -33,7 +32,7 @@ void Master::Wipe ()
 		node = nullptr;
 	}
 	
-	printf ("Wipe!\n");
+	Log (DEBUG, "Wipe!");
 }
 
 

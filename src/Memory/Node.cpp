@@ -1,6 +1,6 @@
 #include "Node.h"
 
-#include <stdio.h>
+#include "../Logger.h"
 
 const Node* null_node = new Node (nullptr);
 
@@ -11,25 +11,24 @@ Node::Node (Master* master)
 
 Node::~Node ()
 {
-	printf ("~~~ Node destructor!!!!\n");
+	Log (DEBUG, "~~~ Node destructor!!!!");
 }
 
 void Node::Increase ()
 {
 	count++;
-	printf ("Increase, count = %i\n", count);
+	Log (DEBUG, "Increase, count = ", count);
 }
 
 void Node::Decrease ()
 {
 	count--;
 	
-	printf ("Decrease, count = %i\n", count);
+	Log (DEBUG, "Decrease, count = ", count);
 	
 	if (count == 0)
 	{
-		printf ("Decrease, Destroying object\n", count);
-		
+		Log (DEBUG, "Decrease, Destroying object, count = ", count);
 		
 		if (master)
 		{

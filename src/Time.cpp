@@ -1,7 +1,7 @@
 #include "Time.h"
 
 #include <chrono>
-#include <stdio.h>
+#include "Logger.h"
 
 float Time::time;
 float Time::delta;

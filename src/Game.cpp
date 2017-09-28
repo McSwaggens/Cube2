@@ -1,6 +1,6 @@
 #include "Game.h"
 
-#include <stdio.h>
+#include "Logger.h"
 #include <bitset>
 #include "WorldObject.h"
 
@@ -19,10 +19,10 @@ void Game::EnginePreUpdate ()
 
 void Game::Start ()
 {
-	printf ("Hello World from Game.cpp!\n");
+	Log (INFO, "Hello World from Game.cpp!");
 	std::bitset<32> binary (engine_data.flags);
 	
 	
-	printf ("flags binary: %u %s\n", engine_data.flags, binary.to_string().c_str());
+	Log (INFO, "flags binary: ", engine_data.flags, " ", binary.to_string());
 	Destroy ();
 }

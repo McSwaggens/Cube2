@@ -8,7 +8,7 @@
 #pragma once
 
 #include <vector>
-#include <stdio.h>
+#include "Logger.h"
 
 #include "Game.h"
 #include "Entity.h"

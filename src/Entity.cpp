@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-#include <stdio.h>
+#include "Logger.h"
 
 Entity::Entity ()
 {

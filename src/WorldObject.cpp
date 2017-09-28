@@ -1,5 +1,5 @@
 #include "WorldObject.h"
-#include <stdio.h>
+#include "Logger.h"
 
 void WorldObject::Start ()
 {
